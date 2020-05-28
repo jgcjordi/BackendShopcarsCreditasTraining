@@ -2,7 +2,6 @@ package com.creditas.backend.shopcars.cars.domain.entities
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonManagedReference
-import org.jetbrains.annotations.NotNull
 import java.time.LocalDateTime
 import javax.persistence.*
 

@@ -36,4 +36,3 @@ class OnBoot(
 		println(carService.findAll()[0].numberPlate)
 	}
 }
-
