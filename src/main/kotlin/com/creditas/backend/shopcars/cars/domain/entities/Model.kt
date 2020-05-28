@@ -7,21 +7,21 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-@Table(name="model")
+@Table
 data class Model (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Long?,
-    var name: String,
-    @JsonManagedReference(value="brand")
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="brand_id")
+    var id : Long = 0,
+    var name: String = "name",
+    var createAt: LocalDateTime = LocalDateTime.now(),
+    var updateAt: LocalDateTime = LocalDateTime.now(),
+
+    @JsonManagedReference
+    @ManyToOne
+    @JoinColumn
     var brand: Brand,
-    @JsonBackReference(value="model")
+
+    @JsonBackReference
     @OneToMany(mappedBy= "model", fetch = FetchType.LAZY, cascade = [(CascadeType.ALL)], orphanRemoval = true)
-    var car: List<Car>,
-    @NotNull
-    var create_at: LocalDateTime? = LocalDateTime.now(),
-    var update_at: LocalDateTime?
+    var cars: List<Car> = listOf()
 )
