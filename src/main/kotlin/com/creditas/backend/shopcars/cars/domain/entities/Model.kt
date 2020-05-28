@@ -17,11 +17,11 @@ data class Model (
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="brand_id")
-    var brand: Brand,
+    var brand: Brand? = null,
     @JsonBackReference(value="model")
     @OneToMany(mappedBy= "model", fetch = FetchType.LAZY, cascade = [(CascadeType.ALL)], orphanRemoval = true)
-    var car: List<Car>,
+    var car: List<Car>? = null,
     @NotNull
     var create_at: LocalDateTime? = LocalDateTime.now(),
-    var update_at: LocalDateTime?
+    var update_at: LocalDateTime? = null
 )

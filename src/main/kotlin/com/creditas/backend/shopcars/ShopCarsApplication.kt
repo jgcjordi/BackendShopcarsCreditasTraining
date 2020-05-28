@@ -1,6 +1,9 @@
 package com.creditas.backend.shopcars
 
 import com.creditas.backend.shopcars.cars.domain.entities.Brand
+import com.creditas.backend.shopcars.cars.domain.entities.Model
+import com.creditas.backend.shopcars.cars.services.implementation.BrandServiceImpl
+import com.creditas.backend.shopcars.cars.services.implementation.ModelServiceImpl
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -22,30 +25,14 @@ fun main(args: Array<String>) {
 }
 
 @Component
-class OnBoot(private val carService: CarService) : ApplicationRunner {
+class OnBoot(private val brandService: BrandServiceImpl, private val modelService: ModelServiceImpl) : ApplicationRunner {
 	override fun run(args: ApplicationArguments?) {
-		carService.save(Brand(0, name="Ford"))
-		println(carService.findAll()[0].name)
+		val brand: Brand = brandService.addBrand(Brand(0, name="Ford"))
+		modelService.addModel(Model(0,"Fiesta",brand))
+		println(brandService.getBrands()[0].name)
+		println(modelService.getModels()[0].brand!!.name)
 	}
 }
-
-@Service
-class CarService(val carDAO: CarDao) {
-	fun findAll(): List<Brand> = carDAO.findAll()
-	fun save(t: Brand) = carDAO.save(t)
-}
-
-@Repository
-interface CarDao : JpaRepository<Brand, Int>
-
-/*
-@Entity
-data class Car(
-		@Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY)
-		var id: Long = 0,
-		val name: String
-)*/
 
 //Prueba1
 
