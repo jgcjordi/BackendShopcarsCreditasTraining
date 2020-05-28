@@ -1,5 +1,6 @@
 package com.creditas.backend.shopcars
 
+import com.creditas.backend.shopcars.cars.domain.entities.Brand
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -23,28 +24,28 @@ fun main(args: Array<String>) {
 @Component
 class OnBoot(private val carService: CarService) : ApplicationRunner {
 	override fun run(args: ApplicationArguments?) {
-		carService.save(Car(0, "Ford"))
+		carService.save(Brand(0, name="Ford"))
 		println(carService.findAll()[0].name)
 	}
 }
 
 @Service
 class CarService(val carDAO: CarDao) {
-	fun findAll(): List<Car> = carDAO.findAll()
-	fun save(t: Car) = carDAO.save(t)
+	fun findAll(): List<Brand> = carDAO.findAll()
+	fun save(t: Brand) = carDAO.save(t)
 }
 
 @Repository
-interface CarDao : JpaRepository<Car, Long>
+interface CarDao : JpaRepository<Brand, Int>
 
-
+/*
 @Entity
 data class Car(
 		@Id
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		var id: Long = 0,
 		val name: String
-)
+)*/
 
 //Prueba1
 
