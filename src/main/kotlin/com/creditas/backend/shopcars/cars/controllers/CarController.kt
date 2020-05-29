@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @CrossOrigin
 @RequestMapping("api/v1/cars")
-class CarController (private val carService: CarServiceImpl, private val brandsService: BrandServiceImpl) {
+class CarController (
+        private val carService: CarServiceImpl,
+        private val brandsService: BrandServiceImpl,
+        private val modelService: ModelServiceImpl) {
 
     private val LOGGER = LogFactory.getLog("CarController.class")
 
@@ -30,20 +33,25 @@ class CarController (private val carService: CarServiceImpl, private val brandsS
     }
 
     @PostMapping("/save")
-    fun save(@RequestBody body: Car) = ResponseEntity.status(HttpStatus.CREATED)
-            .body(carService.saveCar(body))
+    fun save(@RequestBody car: Car) = ResponseEntity.status(HttpStatus.CREATED)
+            .body(carService.saveCar(car))
 
     @PutMapping
-    fun update(@RequestBody body: Car) = carService.updateCar(body)
+    fun update(@RequestBody car: Car) = carService.updateCar(car)
 
     @DeleteMapping("/{id}")
     fun deleteById(@PathVariable id: Long) = carService.deleteCarById(id)
 
 
-
     //http://localhost:8080/api/v1/cars/brands
     @GetMapping("/brands")
     fun findAllBrands() = brandsService.findAllBrands()
+
+    //http://localhost:8080/api/v1/cars/models-of-brand/
+    @GetMapping("/models-of-brand")
+    fun findAllModelsOfBrand(@RequestBody car: Car) {
+    }
+
 
 
 }
