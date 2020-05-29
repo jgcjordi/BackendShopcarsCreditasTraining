@@ -10,14 +10,13 @@ import javax.persistence.*
 data class Brand (
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        var id : Long?,
-        var name:String,
+        var id : Long = 0,
+        var name:String = "name",
         @JsonBackReference(value="brand")
         @OneToMany(mappedBy = "brand", fetch = FetchType.LAZY, cascade = [(CascadeType.ALL)], orphanRemoval = true)
-        var model: List<Model>? = null,
-        @NotNull
-        var create_at: LocalDateTime? = LocalDateTime.now(),
-        var update_at: LocalDateTime?= null
+        var model: List<Model> = listOf(),
+        var create_at: LocalDateTime = LocalDateTime.now(),
+        var update_at: LocalDateTime = LocalDateTime.now()
 ){
 
 }

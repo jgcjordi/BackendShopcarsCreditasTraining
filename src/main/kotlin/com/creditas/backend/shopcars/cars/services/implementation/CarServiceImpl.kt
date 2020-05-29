@@ -8,21 +8,21 @@ import org.springframework.stereotype.Service
 import javax.persistence.EntityNotFoundException
 
 @Service
-class CarServiceImpl(private val ICarDao: ICarDao): ICarService{
-    override fun findAllCars(): List<Car> = ICarDao.findAll()
+class CarServiceImpl(private val carDao: ICarDao): ICarService{
+    override fun findAllCars(): List<Car> = carDao.findAll()
 
-    override fun findCarById(id: Long): Car? = ICarDao.findByIdOrNull(id)
+    override fun findCarById(id: Long): Car? = carDao.findByIdOrNull(id)
 
-    override fun saveCar(car: Car): Car = ICarDao.save(car)
+    override fun saveCar(car: Car): Car = carDao.save(car)
 
     override fun updateCar(car: Car): Car{
-        return if(ICarDao.existsById(car.id)) ICarDao.save(car)
+        return if(carDao.existsById(car.id)) carDao.save(car)
         else throw  EntityNotFoundException("Car id:${car.id} does not exists")
     }
 
     override fun deleteCarById(id: Long): Car {
         return this.findCarById(id)?.apply {
-            ICarDao.deleteById(this.id)
+            carDao.deleteById(this.id)
         } ?: throw EntityNotFoundException("Car id:$id does not exists")  }
 
 }

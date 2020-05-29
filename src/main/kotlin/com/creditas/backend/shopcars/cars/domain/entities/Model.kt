@@ -11,17 +11,15 @@ import javax.persistence.*
 data class Model (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id : Long?,
-    var name: String,
+    var id : Long = 0,
+    var name: String = "name",
     @JsonManagedReference(value="brand")
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="brand_id")
-    var brand: Brand? = null,
+    var brand: Brand,
     @JsonBackReference(value="model")
     @OneToMany(mappedBy= "model", fetch = FetchType.LAZY, cascade = [(CascadeType.ALL)], orphanRemoval = true)
-    var car: List<Car>? = null,
-    @NotNull
-    var create_at: LocalDateTime? = LocalDateTime.now(),
-    var update_at: LocalDateTime? = null
+    var car: List<Car> = listOf(),
+    var create_at: LocalDateTime = LocalDateTime.now(),
+    var update_at: LocalDateTime = LocalDateTime.now()
 )
