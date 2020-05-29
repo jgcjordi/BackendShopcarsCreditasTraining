@@ -1,6 +1,8 @@
 package com.creditas.backend.shopcars.cars.controllers
 
+import com.creditas.backend.shopcars.cars.domain.entities.Brand
 import com.creditas.backend.shopcars.cars.domain.entities.Car
+import com.creditas.backend.shopcars.cars.domain.entities.Model
 import com.creditas.backend.shopcars.cars.services.implementation.BrandServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.CarServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.ModelServiceImpl
@@ -49,7 +51,10 @@ class CarController (
 
     //http://localhost:8080/api/v1/cars/models-of-brand/
     @GetMapping("/models-of-brand")
-    fun findAllModelsOfBrand(@RequestBody car: Car) {
+    fun findAllModelsOfBrand(@RequestBody band: Brand):ResponseEntity<List<Model>> {
+        val entity = modelService.findAllModelsByBrand(band)
+        return ResponseEntity.status(
+                if (entity.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
     }
 
 
