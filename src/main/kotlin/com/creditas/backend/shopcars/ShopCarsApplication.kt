@@ -66,6 +66,12 @@ class OnBoot(
 		val fiesta = modelService.saveModel(Model(name="Fiesta", brand = ford))
 		carService.saveCar(Car(number_plate = "2385 AYR", model = mustang))
 		carService.saveCar(Car(number_plate = "4577 JGC", model = fiesta))
+		val seat = brandService.saveBrand(Brand(name="Seat"))
+		val ibiza = modelService.saveModel(Model(name="Ibiza", brand = seat))
+		val leon = modelService.saveModel(Model(name="Leon", brand = seat))
+		carService.saveCar(Car(number_plate = "5378 DTG", model = ibiza))
+		carService.saveCar(Car(number_plate = "3372 GHY", model = leon))
+
 
 		println(carService.findAllCars()[0].number_plate)
 	}
