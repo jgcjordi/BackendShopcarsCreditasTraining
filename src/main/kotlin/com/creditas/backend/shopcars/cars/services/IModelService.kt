@@ -11,5 +11,4 @@ interface IModelService {
     fun deleteModelById(id: Long):Model
 
     fun findAllModelsByBrand(brand: Brand): List<Model>
-
 }

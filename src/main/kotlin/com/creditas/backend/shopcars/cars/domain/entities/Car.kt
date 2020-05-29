@@ -13,12 +13,12 @@ data class Car (
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id : Long = 0,
-        var name:String,
-        var price: Float,
-        var number_plate: String,
-        var fuel_type: Int,
-        var km:Int,
-        var color: String,
+        var name:String = "name",
+        var price: Float = 0f,
+        var number_plate: String = "0000 ABC",
+        var fuel_type: Int = 0,
+        var km:Int = 0,
+        var color: String = "color",
         @JsonManagedReference(value="model")
         @NotNull
         @ManyToOne(fetch = FetchType.LAZY)

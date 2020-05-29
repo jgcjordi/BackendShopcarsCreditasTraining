@@ -2,7 +2,6 @@ package com.creditas.backend.shopcars.cars.services.implementation
 
 import com.creditas.backend.shopcars.cars.domain.dao.IBrandDao
 import com.creditas.backend.shopcars.cars.domain.entities.Brand
-import com.creditas.backend.shopcars.cars.domain.entities.Car
 import com.creditas.backend.shopcars.cars.services.IBrandService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service

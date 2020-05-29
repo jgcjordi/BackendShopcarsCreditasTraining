@@ -2,10 +2,8 @@ package com.creditas.backend.shopcars.cars.services.implementation
 
 import com.creditas.backend.shopcars.cars.domain.dao.IModelDao
 import com.creditas.backend.shopcars.cars.domain.entities.Brand
-import com.creditas.backend.shopcars.cars.domain.entities.Car
 import com.creditas.backend.shopcars.cars.domain.entities.Model
 import com.creditas.backend.shopcars.cars.services.IModelService
-import com.sun.org.apache.xpath.internal.operations.Mod
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import javax.persistence.EntityNotFoundException
