@@ -8,7 +8,12 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "user")
-data class User(var name: String?,
+data class User(
+                @Id
+                @GeneratedValue(strategy = GenerationType.IDENTITY)
+                var id : Long = 0,
+                var role: String = "USER",
+                var name: String?,
                 var surname: String?,
                 var birthday: LocalDate?,
                 @NotNull
@@ -26,9 +31,4 @@ data class User(var name: String?,
                         joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
                         inverseJoinColumns = [JoinColumn(name = "car_id", referencedColumnName = "id")])
                 @JsonManagedReference(value="user_seller_car")
-                var seller_car: MutableList<Car> = mutableListOf<Car>()) {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = 0
-    var role: String? = "USER"
-}
+                var seller_car: MutableList<Car> = mutableListOf<Car>())

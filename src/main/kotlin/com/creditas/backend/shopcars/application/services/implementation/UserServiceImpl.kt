@@ -11,22 +11,22 @@ import javax.persistence.EntityNotFoundException
 import javax.servlet.http.HttpServletRequest
 
 @Service
-class UserServiceImpl(private val IUserDao: IUserDao) : IUserService {
-    override fun getUsers(): List<User> = IUserDao.findAll()
+class UserServiceImpl(private val UserDao: IUserDao) : IUserService {
+    override fun getUsers(): List<User> = UserDao.findAll()
 
-    override fun findUserByID(id: Long): User? = IUserDao.findByIdOrNull(id)
+    override fun findUserByID(id: Long): User? = UserDao.findByIdOrNull(id)
 
-    override fun addUser(user: User): User {
+    override fun saveUser(user: User): User {
         user.password = BCryptPasswordEncoder().encode(user.password)
-        return IUserDao.save(user)
+        return UserDao.save(user)
     }
 
-    override fun findUserByEmail(email: String): User? = IUserDao.findOneByEmail(email)
+    override fun findUserByEmail(email: String): User? = UserDao.findOneByEmail(email)
 
-    override fun deleteUser(id: Long) = IUserDao.deleteById(id)
+    override fun deleteUserById(id: Long) = UserDao.deleteById(id)
 
-    override fun getJWT(email: String, id: Long, role: String, request: HttpServletRequest): String {
-        return JWTAuthorizationFilter().createJWT(email,id,role,request)
+    override fun getJWT(user: User, request: HttpServletRequest): String {
+        return JWTAuthorizationFilter().createJWT(user.email,user.id,user.role,request)
     }
 
     override fun login(email: String, password: String): User {
@@ -37,5 +37,9 @@ class UserServiceImpl(private val IUserDao: IUserDao) : IUserService {
                 throw EntityNotFoundException("Your username or password is incorrect")
             }
         } ?: throw EntityNotFoundException("Your username or password is incorrect")
+    }
+    override fun updateUser(user: User): User {
+        return if(UserDao.existsById(user.id)) UserDao.save(user)
+        else throw  EntityNotFoundException("User id:${user.id} does not exists")
     }
 }
