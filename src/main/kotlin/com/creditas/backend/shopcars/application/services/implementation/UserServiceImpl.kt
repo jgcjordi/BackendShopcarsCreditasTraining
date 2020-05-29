@@ -1,7 +1,7 @@
 package com.creditas.backend.shopcars.application.services.implementation
 
 import com.creditas.backend.shopcars.application.domain.dao.IUserDao
-import com.creditas.backend.shopcars.application.domain.entities.User
+import com.creditas.backend.shopcars.application.domain.entities.UserShop
 import com.creditas.backend.shopcars.application.infraestructure.security.JWTAuthorizationFilter
 import com.creditas.backend.shopcars.application.services.IUserService
 import org.springframework.data.repository.findByIdOrNull
@@ -12,24 +12,24 @@ import javax.servlet.http.HttpServletRequest
 
 @Service
 class UserServiceImpl(private val UserDao: IUserDao) : IUserService {
-    override fun getUsers(): List<User> = UserDao.findAll()
+    override fun getUsers(): List<UserShop> = UserDao.findAll()
 
-    override fun findUserByID(id: Long): User? = UserDao.findByIdOrNull(id)
+    override fun findUserByID(id: Long): UserShop? = UserDao.findByIdOrNull(id)
 
-    override fun saveUser(user: User): User {
-        user.password = BCryptPasswordEncoder().encode(user.password)
-        return UserDao.save(user)
+    override fun saveUser(userShop: UserShop): UserShop {
+        userShop.password = BCryptPasswordEncoder().encode(userShop.password)
+        return UserDao.save(userShop)
     }
 
-    override fun findUserByEmail(email: String): User? = UserDao.findOneByEmail(email)
+    override fun findUserByEmail(email: String): UserShop? = UserDao.findOneByEmail(email)
 
     override fun deleteUserById(id: Long) = UserDao.deleteById(id)
 
-    override fun getJWT(user: User, request: HttpServletRequest): String {
-        return JWTAuthorizationFilter().createJWT(user.email,user.id,user.role,request)
+    override fun getJWT(userShop: UserShop, request: HttpServletRequest): String {
+        return JWTAuthorizationFilter().createJWT(userShop.email,userShop.id,userShop.role,request)
     }
 
-    override fun login(email: String, password: String): User {
+    override fun login(email: String, password: String): UserShop {
         return this.findUserByEmail(email)?.apply {
             if (BCryptPasswordEncoder().matches(password, this.password)) {
                 return this
@@ -38,8 +38,8 @@ class UserServiceImpl(private val UserDao: IUserDao) : IUserService {
             }
         } ?: throw EntityNotFoundException("Your username or password is incorrect")
     }
-    override fun updateUser(user: User): User {
-        return if(UserDao.existsById(user.id)) UserDao.save(user)
-        else throw  EntityNotFoundException("User id:${user.id} does not exists")
+    override fun updateUser(userShop: UserShop): UserShop {
+        return if(UserDao.existsById(userShop.id)) UserDao.save(userShop)
+        else throw  EntityNotFoundException("User id:${userShop.id} does not exists")
     }
 }

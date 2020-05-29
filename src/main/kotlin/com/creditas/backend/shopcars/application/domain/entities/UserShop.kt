@@ -4,11 +4,12 @@ import com.creditas.backend.shopcars.cars.domain.entities.Car
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.sun.istack.NotNull
 import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-@Table(name = "user")
-data class User(
+@Table(name = "userShop")
+data class UserShop(
                 @Id
                 @GeneratedValue(strategy = GenerationType.IDENTITY)
                 var id : Long = 0,
@@ -20,15 +21,18 @@ data class User(
                 @Column(unique = true)
                 var email: String,
                 var password: String,
-                @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-                @JoinTable(name = "user_purchaser_car",
-                        joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
+                @ManyToMany(cascade = [CascadeType.ALL],fetch = FetchType.LAZY)
+                @JoinTable(name = "userShop_purchaser_car",
+                        joinColumns = [JoinColumn(name = "userShop_id", referencedColumnName = "id")],
                         inverseJoinColumns = [JoinColumn(name = "car_id", referencedColumnName = "id")])
-                @JsonManagedReference(value="user_purchaser_car")
+                @JsonManagedReference(value="userShop_purchaser_car")
                 var purchaser_car: MutableList<Car> = mutableListOf<Car>(),
-                @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-                @JoinTable(name = "user_seller_car",
-                        joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
+                @ManyToMany(cascade = [CascadeType.ALL],fetch = FetchType.LAZY)
+                @JoinTable(name = "userShop_seller_car",
+                        joinColumns = [JoinColumn(name = "userShop_id", referencedColumnName = "id")],
                         inverseJoinColumns = [JoinColumn(name = "car_id", referencedColumnName = "id")])
-                @JsonManagedReference(value="user_seller_car")
-                var seller_car: MutableList<Car> = mutableListOf<Car>())
+                @JsonManagedReference(value="userShop_seller_car")
+                var seller_car: MutableList<Car> = mutableListOf<Car>(),
+                @NotNull
+                var create_at: LocalDateTime = LocalDateTime.now(),
+                var update_at: LocalDateTime = LocalDateTime.now())

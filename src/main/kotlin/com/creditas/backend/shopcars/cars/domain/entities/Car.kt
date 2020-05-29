@@ -1,6 +1,6 @@
 package com.creditas.backend.shopcars.cars.domain.entities
 
-import com.creditas.backend.shopcars.application.domain.entities.User
+import com.creditas.backend.shopcars.application.domain.entities.UserShop
 import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import org.jetbrains.annotations.NotNull
@@ -25,11 +25,11 @@ data class Car (
         @JoinColumn(name="model_id")
         var model: Model,
         @ManyToMany(mappedBy = "purchaser_car")
-        @JsonBackReference(value="user_purchaser_car")
-        var purchaser: MutableList<User> = mutableListOf<User>(),
+        @JsonBackReference(value="userShop_purchaser_car")
+        var purchaser: MutableList<UserShop> = mutableListOf<UserShop>(),
         @ManyToMany(mappedBy = "seller_car")
-        @JsonBackReference(value="user_seller_car")
-        var seller: MutableList<User> = mutableListOf<User>(),
+        @JsonBackReference(value="userShop_seller_car")
+        var seller: MutableList<UserShop> = mutableListOf<UserShop>(),
         @NotNull
         var create_at: LocalDateTime = LocalDateTime.now(),
         var update_at: LocalDateTime = LocalDateTime.now()
