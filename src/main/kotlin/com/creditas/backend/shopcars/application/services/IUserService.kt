@@ -6,9 +6,10 @@ import javax.servlet.http.HttpServletRequest
 interface IUserService {
     fun getUsers(): List<User>
     fun findUserByID(idUser:Long): User?
-    fun addUser(user:User): User
+    fun saveUser(user:User): User
+    fun updateUser(user: User): User
     fun findUserByEmail(email:String): User?
-    fun deleteUser(idUser:Long)
-    fun getJWT(email:String,id:Long,role: String, request: HttpServletRequest):String
+    fun deleteUserById(idUser:Long)
+    fun getJWT(user: User, request: HttpServletRequest):String
     fun login(email:String,password:String):User
 }
