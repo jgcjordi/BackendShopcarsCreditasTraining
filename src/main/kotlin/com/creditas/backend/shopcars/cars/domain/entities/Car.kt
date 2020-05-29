@@ -10,9 +10,9 @@ import javax.persistence.*
 data class Car (
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        var id : Long?,
-        var name:String?,
-        var price: Float?,
+        var id : Long = 0,
+        var name:String,
+        var price: Float,
         var number_plate: String,
         var fuel_type: Int,
         var km:Int,
@@ -23,6 +23,6 @@ data class Car (
         @JoinColumn(name="model_id")
         var model: Model,
         @NotNull
-        var create_at: LocalDateTime? = LocalDateTime.now(),
-        var update_at: LocalDateTime?
+        var create_at: LocalDateTime = LocalDateTime.now(),
+        var update_at: LocalDateTime = LocalDateTime.now()
 )
