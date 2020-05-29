@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @CrossOrigin
-@RequestMapping("api/v1/users")
+@RequestMapping("api/v1/customers")
 class customerController (private val customerService: customerServiceImpl){
     private val LOGGER = LogFactory.getLog("UserController.class")
 

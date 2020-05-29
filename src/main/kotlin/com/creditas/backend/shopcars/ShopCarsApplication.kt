@@ -1,6 +1,7 @@
 package com.creditas.backend.shopcars
 
 import com.creditas.backend.shopcars.application.domain.entities.Customer
+import com.creditas.backend.shopcars.application.infraestructure.security.JWTAuthorizationFilter
 import com.creditas.backend.shopcars.application.services.implementation.customerServiceImpl
 import com.creditas.backend.shopcars.cars.domain.entities.Brand
 import com.creditas.backend.shopcars.cars.domain.entities.Car
@@ -12,11 +13,41 @@ import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 
 @SpringBootApplication
-class ShopCarsApplication
+class ShopCarsApplication{
+	companion object {
+		@JvmStatic
+		fun main(args: Array<String>) {
+			runApplication<ShopCarsApplication>(*args)
+		}
+	}
+
+	@EnableWebSecurity
+	@Configuration
+	@EnableGlobalMethodSecurity(prePostEnabled = true)
+	class WebSecurityConfig : WebSecurityConfigurerAdapter() {
+		override fun configure(httpSecurity: HttpSecurity) {
+			httpSecurity
+					.cors()
+					.and()
+					.csrf().disable()
+					.authorizeRequests()
+					.antMatchers("/api/v1/customers/login").permitAll()
+					.anyRequest().authenticated()
+					.and()
+					.addFilterBefore(JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter::class.java)
+		}
+	}
+}
 
 fun main(args: Array<String>) {
 	runApplication<ShopCarsApplication>(*args)
