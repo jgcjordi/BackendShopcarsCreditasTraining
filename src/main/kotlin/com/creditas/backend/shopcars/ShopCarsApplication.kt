@@ -6,7 +6,6 @@ import com.creditas.backend.shopcars.cars.domain.entities.Model
 import com.creditas.backend.shopcars.cars.services.implementation.BrandServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.CarServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.ModelServiceImpl
-import com.sun.org.apache.xpath.internal.operations.Mod
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
