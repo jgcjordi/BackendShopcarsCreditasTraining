@@ -34,8 +34,8 @@ class OnBoot(
 		val ford = brandService.saveBrand(Brand(name="Ford"))
 		val mustang = modelService.saveModel(Model(name="Mustang", brand = ford))
 		val fiesta = modelService.saveModel(Model(name="Fiesta", brand = ford))
-		val car1 = carService.saveCar(Car(number_plate = "2385 AYR", model = mustang, purchaser = mutableListOf(user1)))
-		val car2 = carService.saveCar(Car(number_plate = "4577 JGC", model = fiesta, seller = mutableListOf(user1)))
+		carService.saveCar(Car(number_plate = "2385 AYR", model = mustang))
+		carService.saveCar(Car(number_plate = "4577 JGC", model = fiesta))
 
 		println(carService.findAllCars()[0].number_plate)
 	}
