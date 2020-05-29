@@ -40,8 +40,7 @@ class ShopCarsApplication{
 					.cors()
 					.and()
 					.csrf().disable()
-					.authorizeRequests()
-					.antMatchers("/api/v1/customers/login").permitAll()
+					.antMatcher("/api/v1/customers/login").authorizeRequests()
 					.anyRequest().authenticated()
 					.and()
 					.addFilterBefore(JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter::class.java)
@@ -52,7 +51,6 @@ class ShopCarsApplication{
 fun main(args: Array<String>) {
 	runApplication<ShopCarsApplication>(*args)
 }
-//borrar esta linea
 
 @Component
 class OnBoot(
