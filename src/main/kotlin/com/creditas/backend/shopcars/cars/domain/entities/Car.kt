@@ -1,5 +1,7 @@
 package com.creditas.backend.shopcars.cars.domain.entities
 
+import com.creditas.backend.shopcars.application.domain.entities.User
+import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import org.jetbrains.annotations.NotNull
 import java.time.LocalDateTime
@@ -22,6 +24,12 @@ data class Car (
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name="model_id")
         var model: Model,
+        @ManyToMany(mappedBy = "purchaser_car")
+        @JsonBackReference(value="user_purchaser_car")
+        var purchaser: MutableList<User> = mutableListOf<User>(),
+        @ManyToMany(mappedBy = "seller_car")
+        @JsonBackReference(value="user_seller_car")
+        var seller: MutableList<User> = mutableListOf<User>(),
         @NotNull
         var create_at: LocalDateTime = LocalDateTime.now(),
         var update_at: LocalDateTime = LocalDateTime.now()
