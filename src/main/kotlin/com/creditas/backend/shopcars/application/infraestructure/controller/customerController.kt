@@ -24,7 +24,7 @@ class customerController (private val customerService: customerServiceImpl){
                 if (entity != null) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
     }
 
-    @GetMapping("/save")
+    @PostMapping("/save")
     fun save(@RequestBody customer: Customer) = ResponseEntity.status(HttpStatus.CREATED)
             .body(customerService.saveCustomer(customer))
 

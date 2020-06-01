@@ -16,6 +16,7 @@ data class Customer(
                 var role: String = "USER",
                 var name: String?,
                 var surname: String?,
+                var identification: String?,
                 var birthday: LocalDate?,
                 @NotNull
                 @Column(unique = true)
