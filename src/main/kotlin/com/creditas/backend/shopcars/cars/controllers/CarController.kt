@@ -22,12 +22,13 @@ class CarController (
 
     private val LOGGER = LogFactory.getLog("CarController.class")
 
-    //http://localhost:8080/api/v1/cars
-    @GetMapping
-    fun findAllCars() = carService.findAllCars()
+    //http://localhost:8080/api/v1/cars/open
+    @GetMapping("/open")
+    fun findAllCars() = carService.findAllCarsNoPurchased()
+
 
     //http://localhost:8080/api/v1/cars/1
-    @GetMapping("/{id}")
+    @GetMapping("/open/{id}")
     fun findById(@PathVariable id: Long): ResponseEntity<Car> {
         val entity = carService.findCarById(id)
         return ResponseEntity.status(
@@ -55,13 +56,13 @@ class CarController (
 
 
     //http://localhost:8080/api/v1/cars/brands
-    @GetMapping("/brands")
+    @GetMapping("/open/brands")
     fun findAllBrands() = brandsService.findAllBrands()
 
     //http://localhost:8080/api/v1/cars/models-of-brand
-    @GetMapping("/models-of-brand")
-    fun findAllModelsOfBrand(@RequestBody band: Brand):ResponseEntity<List<Model>> {
-        val entity = modelService.findAllModelsByBrand(band)
+    @GetMapping("/open/models-of-brand")
+    fun findAllModelsOfBrand(@RequestBody brand: Brand):ResponseEntity<List<Model>> {
+        val entity = modelService.findAllModelsByBrand(brand)
         return ResponseEntity.status(
                 if (entity.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
     }

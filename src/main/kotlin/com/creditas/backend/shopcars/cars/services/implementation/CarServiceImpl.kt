@@ -25,4 +25,5 @@ class CarServiceImpl(private val carDao: ICarDao): ICarService{
             carDao.deleteById(this.id)
         } ?: throw EntityNotFoundException("Car id:$id does not exists")  }
 
+    fun findAllCarsNoPurchased(): List<Car> = carDao.findByPurchaserIsNull()
 }

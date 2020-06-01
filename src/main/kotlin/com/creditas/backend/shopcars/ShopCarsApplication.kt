@@ -45,7 +45,7 @@ class ShopCarsApplication{
 							"/api/v1/customers/login",
 							"/api/v1/customers/save").permitAll()
 					.antMatchers(
-							"/api/v1/cars").permitAll()
+							"/api/v1/cars/open/**").permitAll()
 					.anyRequest().authenticated()
 					.and()
 					.addFilterBefore(JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter::class.java)
