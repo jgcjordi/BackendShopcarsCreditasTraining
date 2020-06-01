@@ -24,7 +24,6 @@ class JWTAuthorizationFilter : OncePerRequestFilter() {
     val SECRET_KEY: String = "[fESVs4W%9OK]bwO!"
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
-
         if (this.existJWT(request, response)) {
             var claims: Claims = this.validateJWT(request)
             if (claims.get("authorities") != null) {
@@ -56,12 +55,13 @@ class JWTAuthorizationFilter : OncePerRequestFilter() {
     }
 
     fun existJWT(req: HttpServletRequest, res: HttpServletResponse): Boolean {
-        var authHeader: String = req.getHeader(HEADER)
+        var authHeader: String? = req.getHeader(HEADER)
         if (authHeader == null) return false
         Logger.warn(authHeader.contains(PREFIX))
-        if (!authHeader.contains(PREFIX)) return false
+        //if (!authHeader.contains(PREFIX)) return false
         return true
     }
+
 
     fun createJWT(email: String, id: Long, role: String, request: HttpServletRequest): String {
         var grantedAuthorities: List<GrantedAuthority> = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_$role");

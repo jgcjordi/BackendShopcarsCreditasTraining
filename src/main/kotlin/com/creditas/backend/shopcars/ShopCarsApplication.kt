@@ -41,7 +41,11 @@ class ShopCarsApplication{
 					.and()
 					.csrf().disable()
 					.authorizeRequests()
-					.antMatchers("/api/v1/customers/login","/api/v1/customers/save").permitAll()
+					.antMatchers(
+							"/api/v1/customers/login",
+							"/api/v1/customers/save").permitAll()
+					.antMatchers(
+							"/api/v1/cars").permitAll()
 					.anyRequest().authenticated()
 					.and()
 					.addFilterBefore(JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter::class.java)
