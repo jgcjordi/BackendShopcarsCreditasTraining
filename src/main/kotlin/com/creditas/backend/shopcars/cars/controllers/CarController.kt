@@ -35,10 +35,19 @@ class CarController (
     }
 
     @PostMapping("/save")
-    fun save(@RequestBody car: Car) = ResponseEntity.status(HttpStatus.CREATED)
-            .body(carService.saveCar(car))
+    fun save(@RequestBody car: Car): ResponseEntity<Car> {
+        val model = modelService.findModelById(car.model.id)
+        return if(model != null){
+            car.model = model
+            ResponseEntity.status(HttpStatus.CREATED)
+                    .body(carService.saveCar(car))
+        }else{
+            car.model.name = "This model not found"
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(car)
+        }
+    }
 
-    @PutMapping
+    @PutMapping("/update")
     fun update(@RequestBody car: Car) = carService.updateCar(car)
 
     @DeleteMapping("/{id}")
@@ -49,7 +58,7 @@ class CarController (
     @GetMapping("/brands")
     fun findAllBrands() = brandsService.findAllBrands()
 
-    //http://localhost:8080/api/v1/cars/models-of-brand/
+    //http://localhost:8080/api/v1/cars/models-of-brand
     @GetMapping("/models-of-brand")
     fun findAllModelsOfBrand(@RequestBody band: Brand):ResponseEntity<List<Model>> {
         val entity = modelService.findAllModelsByBrand(band)

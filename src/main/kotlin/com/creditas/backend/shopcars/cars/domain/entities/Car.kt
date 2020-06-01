@@ -13,17 +13,17 @@ data class Car (
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id : Long = 0,
-        var name:String = "name",
         var price: Float = 0f,
         var number_plate: String = "0000 ABC",
         var fuel_type: Int = 0,
         var km:Int = 0,
         var color: String = "color",
+        var url_image: String = "https://www.pinclipart.com/picdir/big/174-1749268_cartoon-sport-car-sports-car-cartoon-png-clipart.png",
         @JsonManagedReference(value="model")
         @NotNull
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name="model_id")
-        var model: Model,
+        var model: Model = Model(),
         @ManyToMany(mappedBy = "purchaser_car")
         @JsonBackReference(value="customer_purchaser_car")
         var purchaser: MutableList<Customer> = mutableListOf<Customer>(),

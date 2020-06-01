@@ -15,7 +15,7 @@ data class Model (
     @JsonManagedReference(value="brand")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="brand_id")
-    var brand: Brand,
+    var brand: Brand = Brand(),
     @JsonBackReference(value="model")
     @OneToMany(mappedBy= "model", fetch = FetchType.LAZY, cascade = [(CascadeType.ALL)], orphanRemoval = true)
     var car: List<Car> = listOf(),
