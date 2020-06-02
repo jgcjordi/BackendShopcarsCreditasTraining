@@ -60,7 +60,7 @@ class CarController (
     fun findAllBrands() = brandsService.findAllBrands()
 
     //http://localhost:8080/api/v1/cars/models-of-brand
-    @GetMapping("/open/models-of-brand")
+    @PostMapping("/open/models-of-brand")
     fun findAllModelsOfBrand(@RequestBody brand: Brand):ResponseEntity<List<Model>> {
         val entity = modelService.findAllModelsByBrand(brand)
         return ResponseEntity.status(
