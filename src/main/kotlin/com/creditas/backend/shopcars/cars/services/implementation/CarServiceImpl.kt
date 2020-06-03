@@ -1,6 +1,7 @@
 package com.creditas.backend.shopcars.cars.services.implementation
 
 import com.creditas.backend.shopcars.cars.domain.dao.ICarDao
+import com.creditas.backend.shopcars.cars.domain.entities.Brand
 import com.creditas.backend.shopcars.cars.domain.entities.Car
 import com.creditas.backend.shopcars.cars.domain.entities.Model
 import com.creditas.backend.shopcars.cars.services.ICarService
@@ -29,4 +30,6 @@ class CarServiceImpl(private val carDao: ICarDao): ICarService{
     fun findAllCarsNoPurchased(): List<Car> = carDao.findByPurchaserIsNull()
 
     fun findAllCarsNoPurchasedOfModel(model: Model): List<Car> = carDao.findByModelAndPurchaserIsNull(model)
+
+    fun findAllCarsNoPurchasedOfBrand(brand: Brand): List<Car> = carDao.findAllCarsNoPurchasedOfBrand(brand.id)
 }

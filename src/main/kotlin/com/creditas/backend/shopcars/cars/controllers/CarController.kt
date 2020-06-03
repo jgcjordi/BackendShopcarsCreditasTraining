@@ -75,6 +75,12 @@ class CarController (
                 if (entity.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
     }
 
-
+    //http://localhost:8080/api/v1/open/cars-of-brand
+    @PostMapping("/open/cars-of-brand")
+    fun findAllCarsNoPurchasedOfBrand(@RequestBody brand: Brand):ResponseEntity<List<Car>> {
+        val entity = carService.findAllCarsNoPurchasedOfBrand(brand)
+        return ResponseEntity.status(
+                if (entity.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
+    }
 
 }
