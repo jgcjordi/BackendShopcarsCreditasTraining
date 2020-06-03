@@ -24,7 +24,7 @@ class CarController (
 
     //http://localhost:8080/api/v1/cars/open
     @GetMapping("/open")
-    fun findAllCars() = carService.findAllCarsNoPurchased()
+    fun findAllCarsNoPurchased() = carService.findAllCarsNoPurchased()
 
 
     //http://localhost:8080/api/v1/cars/1
@@ -55,14 +55,22 @@ class CarController (
     fun deleteById(@PathVariable id: Long) = carService.deleteCarById(id)
 
 
-    //http://localhost:8080/api/v1/cars/brands
+    //http://localhost:8080/api/v1/cars/open/brands
     @GetMapping("/open/brands")
     fun findAllBrands() = brandsService.findAllBrands()
 
-    //http://localhost:8080/api/v1/cars/models-of-brand
+    //http://localhost:8080/api/v1/cars/open/models-of-brand
     @PostMapping("/open/models-of-brand")
     fun findAllModelsOfBrand(@RequestBody brand: Brand):ResponseEntity<List<Model>> {
         val entity = modelService.findAllModelsByBrand(brand)
+        return ResponseEntity.status(
+                if (entity.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
+    }
+
+    //http://localhost:8080/api/v1/open/cars-of-model
+    @PostMapping("/open/cars-of-model")
+    fun findAllCarsNoPurchasedOfModel(@RequestBody model: Model):ResponseEntity<List<Car>> {
+        val entity = carService.findAllCarsNoPurchasedOfModel(model)
         return ResponseEntity.status(
                 if (entity.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
     }

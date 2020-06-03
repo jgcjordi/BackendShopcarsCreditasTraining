@@ -65,17 +65,19 @@ class OnBoot(
 		private val customerService: customerServiceImpl) : ApplicationRunner {
 
 	override fun run(args: ApplicationArguments?) {
-		val user1 = customerService.saveCustomer(Customer(name="Admin", surname= "Admin",identification = "1234A",birthday =  LocalDate.of(2017, 1, 13),email="admin@admin.com",password="admin"))
 		val ford = brandService.saveBrand(Brand(name="Ford"))
 		val mustang = modelService.saveModel(Model(name="Mustang", brand = ford))
 		val fiesta = modelService.saveModel(Model(name="Fiesta", brand = ford))
-		carService.saveCar(Car(number_plate = "2385 AYR", model = mustang))
-		carService.saveCar(Car(number_plate = "4577 JGC", model = fiesta))
+		val carMustang = carService.saveCar(Car(number_plate = "2385 AYR", model = mustang))
+		val carFiesta = carService.saveCar(Car(number_plate = "4577 JGC", model = fiesta))
 		val seat = brandService.saveBrand(Brand(name="Seat"))
 		val ibiza = modelService.saveModel(Model(name="Ibiza", brand = seat))
 		val leon = modelService.saveModel(Model(name="Leon", brand = seat))
-		carService.saveCar(Car(number_plate = "5378 DTG", model = ibiza))
-		carService.saveCar(Car(number_plate = "3372 GHY", model = leon))
+		val carIbiza = carService.saveCar(Car(number_plate = "5378 DTG", model = ibiza))
+		val carLeon = carService.saveCar(Car(number_plate = "3372 GHY", model = leon))
+
+		val user1 = customerService.saveCustomer(Customer(/*purchaser_car = mutableListOf(carMustang),*/ name="Admin", surname= "Admin",identification = "1234A",birthday =  LocalDate.of(2017, 1, 13),email="admin@admin.com",password="admin"))
+
 
 
 		println(carService.findAllCars()[0].number_plate)
