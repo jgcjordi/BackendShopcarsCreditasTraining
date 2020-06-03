@@ -69,9 +69,9 @@ class OnBoot(
         val mustang = modelService.saveModel(Model(name = "Mustang", brand = ford))
         val fiesta = modelService.saveModel(Model(name = "Fiesta", brand = ford))
         val focus = modelService.saveModel(Model(name = "Focus", brand = ford))
-        val carMustang = carService.saveCar(Car(number_plate = "2385 AYR", model = mustang, km = 5000, price = 300000F, color = "Rojo", url_image = "https://cdn.topgear.es/sites/navi.axelspringer.es/public/styles/1200/public/media/image/2017/05/prueba-ford-mustang-gt_19.jpg?itok=037w0axH"))
-        val carMustang2 = carService.saveCar(Car(number_plate = "4362 LYR", model = mustang, km = 0, price = 325000F, color = "Rojo", url_image = "https://cdn.topgear.es/sites/navi.axelspringer.es/public/styles/1200/public/media/image/2017/05/prueba-ford-mustang-gt_19.jpg?itok=037w0axH"))
-        val carFiesta = carService.saveCar(Car(number_plate = "4577 JGC", model = fiesta, km = 0, price = 20000F, color = "Azul", url_image = "https://static.motor.es/fotos-noticias/2018/05/ford-fiesta-rs-descartado-201846985_1.jpg"))
+        val carMustang = carService.saveCar(Car(number_plate = "2385 AYR", model = mustang, km = 50000, price = 300000F, color = "Rojo", url_image = "https://cdn.topgear.es/sites/navi.axelspringer.es/public/styles/1200/public/media/image/2017/05/prueba-ford-mustang-gt_19.jpg?itok=037w0axH"))
+        val carMustang2 = carService.saveCar(Car(number_plate = "4362 LYR", model = mustang, km = 12500, price = 325000F, color = "Rojo", url_image = "https://cdn.topgear.es/sites/navi.axelspringer.es/public/styles/1200/public/media/image/2017/05/prueba-ford-mustang-gt_19.jpg?itok=037w0axH"))
+        val carFiesta = carService.saveCar(Car(number_plate = "4577 JGC", model = fiesta, km = 45030, price = 20000F, color = "Azul", url_image = "https://static.motor.es/fotos-noticias/2018/05/ford-fiesta-rs-descartado-201846985_1.jpg"))
         val carFiesta2 = carService.saveCar(Car(number_plate = "4732 GHJ", model = fiesta, km = 200000, price = 4000F, color = "Azul", url_image = "https://static.motor.es/fotos-noticias/2018/05/ford-fiesta-rs-descartado-201846985_1.jpg"))
         val carFocus = carService.saveCar(Car(number_plate = "5689 ZJH", model = focus, km = 5050, price = 15000F, color = "Azul", url_image = "https://www.coches.com/fotos_historicas/ford/Focus-ST-Line-2018/high_ford_focus-st-line-2018_r34.jpg"))
 
