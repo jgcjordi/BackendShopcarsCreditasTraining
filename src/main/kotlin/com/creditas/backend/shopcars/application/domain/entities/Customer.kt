@@ -22,13 +22,13 @@ data class Customer(
                 @Column(unique = true)
                 var email: String,
                 var password: String,
-                @ManyToMany(cascade = [CascadeType.ALL],fetch = FetchType.LAZY)
+                @ManyToMany(fetch = FetchType.LAZY)
                 @JoinTable(name = "customer_purchaser_car",
                         joinColumns = [JoinColumn(name = "customer_id", referencedColumnName = "id")],
                         inverseJoinColumns = [JoinColumn(name = "car_id", referencedColumnName = "id")])
                 @JsonManagedReference(value="customer_purchaser_car")
                 var purchaser_car: MutableList<Car> = mutableListOf<Car>(),
-                @ManyToMany(cascade = [CascadeType.ALL],fetch = FetchType.LAZY)
+                @ManyToMany(fetch = FetchType.LAZY)
                 @JoinTable(name = "customer_seller_car",
                         joinColumns = [JoinColumn(name = "customer_id", referencedColumnName = "id")],
                         inverseJoinColumns = [JoinColumn(name = "car_id", referencedColumnName = "id")])
