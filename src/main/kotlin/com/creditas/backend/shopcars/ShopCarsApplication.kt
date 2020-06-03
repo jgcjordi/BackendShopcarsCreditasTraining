@@ -23,66 +23,73 @@ import org.springframework.stereotype.Component
 import java.time.LocalDate
 
 @SpringBootApplication
-class ShopCarsApplication{
-	companion object {
-		@JvmStatic
-		fun main(args: Array<String>) {
-			runApplication<ShopCarsApplication>(*args)
-		}
-	}
+class ShopCarsApplication {
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            runApplication<ShopCarsApplication>(*args)
+        }
+    }
 
-	@EnableWebSecurity
-	@Configuration
-	@EnableGlobalMethodSecurity(prePostEnabled = true)
-	class WebSecurityConfig : WebSecurityConfigurerAdapter() {
-		override fun configure(httpSecurity: HttpSecurity) {
-			httpSecurity
-					.cors()
-					.and()
-					.csrf().disable()
-					.authorizeRequests()
-					.antMatchers(
-							"/api/v1/customers/login",
-							"/api/v1/customers/save").permitAll()
-					.antMatchers(
-							"/api/v1/cars/open/**").permitAll()
-					.anyRequest().authenticated()
-					.and()
-					.addFilterBefore(JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter::class.java)
-		}
-	}
+    @EnableWebSecurity
+    @Configuration
+    @EnableGlobalMethodSecurity(prePostEnabled = true)
+    class WebSecurityConfig : WebSecurityConfigurerAdapter() {
+        override fun configure(httpSecurity: HttpSecurity) {
+            httpSecurity
+                    .cors()
+                    .and()
+                    .csrf().disable()
+                    .authorizeRequests()
+                    .antMatchers(
+                            "/api/v1/customers/login",
+                            "/api/v1/customers/save").permitAll()
+                    .antMatchers(
+                            "/api/v1/cars/open/**").permitAll()
+                    .anyRequest().authenticated()
+                    .and()
+                    .addFilterBefore(JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter::class.java)
+        }
+    }
 }
 
 fun main(args: Array<String>) {
-	runApplication<ShopCarsApplication>(*args)
+    runApplication<ShopCarsApplication>(*args)
 }
 
 @Component
 class OnBoot(
-		private val carService: CarServiceImpl,
-		private val modelService: ModelServiceImpl,
-		private val brandService: BrandServiceImpl,
-		private val customerService: customerServiceImpl) : ApplicationRunner {
+        private val carService: CarServiceImpl,
+        private val modelService: ModelServiceImpl,
+        private val brandService: BrandServiceImpl,
+        private val customerService: customerServiceImpl) : ApplicationRunner {
 
-	override fun run(args: ApplicationArguments?) {
-		val ford = brandService.saveBrand(Brand(name="Ford"))
-		val mustang = modelService.saveModel(Model(name="Mustang", brand = ford))
-		val fiesta = modelService.saveModel(Model(name="Fiesta", brand = ford))
-		val carMustang = carService.saveCar(Car(number_plate = "2385 AYR", model = mustang))
-		val carMustang2 = carService.saveCar(Car(number_plate = "4362 LYR", model = mustang))
-		val carFiesta = carService.saveCar(Car(number_plate = "4577 JGC", model = fiesta))
-		val carFiesta2 = carService.saveCar(Car(number_plate = "4732 GHJ", model = fiesta))
-		val seat = brandService.saveBrand(Brand(name="Seat"))
-		val ibiza = modelService.saveModel(Model(name="Ibiza", brand = seat))
-		val leon = modelService.saveModel(Model(name="Leon", brand = seat))
-		val carIbiza = carService.saveCar(Car(number_plate = "5378 DTG", model = ibiza))
-		val carLeon = carService.saveCar(Car(number_plate = "3372 GHY", model = leon))
+    override fun run(args: ApplicationArguments?) {
+        val ford = brandService.saveBrand(Brand(name = "Ford"))
+        val mustang = modelService.saveModel(Model(name = "Mustang", brand = ford))
+        val fiesta = modelService.saveModel(Model(name = "Fiesta", brand = ford))
+        val focus = modelService.saveModel(Model(name = "Focus", brand = ford))
+        val carMustang = carService.saveCar(Car(number_plate = "2385 AYR", model = mustang, km = 5000, price = 300000F, color = "Rojo", url_image = "https://cdn.topgear.es/sites/navi.axelspringer.es/public/styles/1200/public/media/image/2017/05/prueba-ford-mustang-gt_19.jpg?itok=037w0axH"))
+        val carMustang2 = carService.saveCar(Car(number_plate = "4362 LYR", model = mustang, km = 0, price = 325000F, color = "Rojo", url_image = "https://cdn.topgear.es/sites/navi.axelspringer.es/public/styles/1200/public/media/image/2017/05/prueba-ford-mustang-gt_19.jpg?itok=037w0axH"))
+        val carFiesta = carService.saveCar(Car(number_plate = "4577 JGC", model = fiesta, km = 0, price = 20000F, color = "Azul", url_image = "https://static.motor.es/fotos-noticias/2018/05/ford-fiesta-rs-descartado-201846985_1.jpg"))
+        val carFiesta2 = carService.saveCar(Car(number_plate = "4732 GHJ", model = fiesta, km = 200000, price = 4000F, color = "Azul", url_image = "https://static.motor.es/fotos-noticias/2018/05/ford-fiesta-rs-descartado-201846985_1.jpg"))
+        val carFocus = carService.saveCar(Car(number_plate = "5689 ZJH", model = focus, km = 5050, price = 15000F, color = "Azul", url_image = "https://www.coches.com/fotos_historicas/ford/Focus-ST-Line-2018/high_ford_focus-st-line-2018_r34.jpg"))
 
-		val user1 = customerService.saveCustomer(Customer(purchaser_car = mutableListOf(carMustang), name="Admin", surname= "Admin",identification = "1234A",birthday =  LocalDate.of(2017, 1, 13),email="admin@admin.com",password="admin"))
+        val bmw = brandService.saveBrand(Brand(name = "BMW"))
+        val x1 = modelService.saveModel(Model(name = "X1", brand = bmw))
+        val carX1 = carService.saveCar(Car(number_plate = "5378 DTG", model = x1, km = 1200, price = 24000F, color = "Blanco", url_image ="https://www.topgear.es/sites/topgear.es/public/styles/855/public/dc/fotos/BMW-X1-2016-D01.jpg?itok=xea3DBnS"))
+
+        val nissan = brandService.saveBrand(Brand(name = "Nissan"))
+        val qashqai = modelService.saveModel(Model(name = "QASHQAI", brand = nissan))
+        val juke = modelService.saveModel(Model(name = "Juke", brand = nissan))
+        val carQashqai = carService.saveCar(Car(number_plate = "2475 EJR", model = qashqai, km = 3500, price = 21000F, color = "Blanco", url_image ="https://a.ccdn.es/cnet/contents/media/nissan/qashqai/1234353.jpg/0_122_1280_842//937x624cut/"))
+        val carJuke = carService.saveCar(Car(number_plate = "2565 LKR", model = juke, km = 0, price = 25000F, color = "Rojo", url_image ="https://www.topgear.es/sites/topgear.es/public/styles/855/public/dc/fotos/BMW-X1-2016-D01.jpg?itok=xea3DBnS"))
+
+        val user1 = customerService.saveCustomer(Customer(purchaser_car = mutableListOf(carMustang), name = "Admin", surname = "Admin", identification = "1234A", birthday = LocalDate.of(2017, 1, 13), email = "admin@admin.com", password = "admin"))
 
 
 
-		println(carService.findAllCars()[0].number_plate)
-	}
+        println(carService.findAllCars()[0].number_plate)
+    }
 }
 
