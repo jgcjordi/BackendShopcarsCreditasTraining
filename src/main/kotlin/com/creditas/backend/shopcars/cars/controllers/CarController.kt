@@ -95,4 +95,22 @@ class CarController (
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("El id del coche no existe")
     }
 
+    @GetMapping("/findPurcharseCars")
+    fun findPurcharseCars(request: HttpServletRequest): ResponseEntity<List<Car>> {
+         var entity: List<Car> = mutableListOf()
+            customerControler.getCustomerByToken(request)?.apply() {
+                entity = carService.findPurcharseCars(this.id)
+            }
+        return ResponseEntity.status( if (entity.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
+    }
+
+    @GetMapping("/findSellerCars")
+    fun findSellerCars(request: HttpServletRequest): ResponseEntity<List<Car>> {
+        var entity: List<Car> = mutableListOf()
+        customerControler.getCustomerByToken(request)?.apply() {
+            entity = carService.findSellerCars(this.id)
+        }
+        return ResponseEntity.status( if (entity.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
+    }
+
 }

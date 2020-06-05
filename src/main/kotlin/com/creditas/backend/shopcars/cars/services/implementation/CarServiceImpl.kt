@@ -32,4 +32,8 @@ class CarServiceImpl(private val carDao: ICarDao): ICarService{
     fun findAllCarsNoPurchasedOfModel(model: Model): List<Car> = carDao.findByModelAndPurchaserIsNull(model)
 
     fun findAllCarsNoPurchasedOfBrand(brand: Brand): List<Car> = carDao.findAllCarsNoPurchasedOfBrand(brand.id)
+
+    fun findPurcharseCars(customerId: Long): List<Car> =carDao.findPurcharseCars(customerId)
+
+    fun findSellerCars(customerId: Long): List<Car> =carDao.findSellerCars(customerId)
 }
