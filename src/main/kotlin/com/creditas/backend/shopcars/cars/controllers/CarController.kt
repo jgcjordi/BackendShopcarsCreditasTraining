@@ -1,5 +1,7 @@
 package com.creditas.backend.shopcars.cars.controllers
 
+import com.creditas.backend.shopcars.application.domain.entities.Customer
+import com.creditas.backend.shopcars.application.infraestructure.controller.CustomerController
 import com.creditas.backend.shopcars.cars.domain.entities.Brand
 import com.creditas.backend.shopcars.cars.domain.entities.Car
 import com.creditas.backend.shopcars.cars.domain.entities.Model
@@ -11,6 +13,7 @@ import org.apache.juli.logging.LogFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletRequest
 
 @RestController
 @CrossOrigin
@@ -18,8 +21,8 @@ import org.springframework.web.bind.annotation.*
 class CarController (
         private val carService: CarServiceImpl,
         private val brandsService: BrandServiceImpl,
-        private val modelService: ModelServiceImpl) {
-
+        private val modelService: ModelServiceImpl,
+        private val customerControler: CustomerController){
     private val LOGGER = LogFactory.getLog("CarController.class")
 
     //http://localhost:8080/api/v1/cars/open
@@ -36,16 +39,12 @@ class CarController (
     }
 
     @PostMapping("/save")
-    fun save(@RequestBody car: Car): ResponseEntity<Car> {
-        val model = modelService.findModelById(car.model.id)
-        return if(model != null){
-            car.model = model
-            ResponseEntity.status(HttpStatus.CREATED)
-                    .body(carService.saveCar(car))
-        }else{
-            car.model.name = "This model not found"
-            ResponseEntity.status(HttpStatus.NOT_FOUND).body(car)
+    fun save(request: HttpServletRequest, @RequestBody car: Car): ResponseEntity<Car> {
+        val saveCar: Car = carService.saveCar(car)
+        customerControler.getCustomerByToken(request)?.apply {
+            this.seller_car.add(saveCar)
         }
+        return   ResponseEntity.status(HttpStatus.CREATED).body(carService.saveCar(car))
     }
 
     @PutMapping("/update")

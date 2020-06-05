@@ -2,7 +2,7 @@ package com.creditas.backend.shopcars
 
 import com.creditas.backend.shopcars.application.domain.entities.Customer
 import com.creditas.backend.shopcars.application.infraestructure.security.JWTAuthorizationFilter
-import com.creditas.backend.shopcars.application.services.implementation.customerServiceImpl
+import com.creditas.backend.shopcars.application.services.implementation.CustomerServiceImpl
 import com.creditas.backend.shopcars.cars.domain.entities.Brand
 import com.creditas.backend.shopcars.cars.domain.entities.Car
 import com.creditas.backend.shopcars.cars.domain.entities.Model
@@ -62,7 +62,7 @@ class OnBoot(
         private val carService: CarServiceImpl,
         private val modelService: ModelServiceImpl,
         private val brandService: BrandServiceImpl,
-        private val customerService: customerServiceImpl) : ApplicationRunner {
+        private val customerService: CustomerServiceImpl) : ApplicationRunner {
 
     override fun run(args: ApplicationArguments?) {
         val ford = brandService.saveBrand(Brand(name = "Ford"))

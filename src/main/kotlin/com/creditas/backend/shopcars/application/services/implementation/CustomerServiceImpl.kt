@@ -11,7 +11,7 @@ import javax.persistence.EntityNotFoundException
 import javax.servlet.http.HttpServletRequest
 
 @Service
-class customerServiceImpl(private val customerDao: ICustomerDao) : ICustomerService {
+class CustomerServiceImpl(private val customerDao: ICustomerDao) : ICustomerService {
     override fun getCustomers(): List<Customer> = customerDao.findAll()
 
     override fun findCustomerByID(id: Long): Customer? = customerDao.findByIdOrNull(id)

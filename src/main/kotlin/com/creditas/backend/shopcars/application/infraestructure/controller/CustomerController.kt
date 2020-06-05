@@ -1,7 +1,9 @@
 package com.creditas.backend.shopcars.application.infraestructure.controller
 
 import com.creditas.backend.shopcars.application.domain.entities.Customer
-import com.creditas.backend.shopcars.application.services.implementation.customerServiceImpl
+import com.creditas.backend.shopcars.application.infraestructure.security.JWTAuthorizationFilter
+import com.creditas.backend.shopcars.application.services.implementation.CustomerServiceImpl
+import io.jsonwebtoken.Claims
 import org.apache.juli.logging.LogFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -11,8 +13,15 @@ import javax.servlet.http.HttpServletRequest
 @RestController
 @CrossOrigin
 @RequestMapping("api/v1/customers")
-class customerController (private val customerService: customerServiceImpl){
+class CustomerController (private val customerService: CustomerServiceImpl){
     private val LOGGER = LogFactory.getLog("UserController.class")
+
+    fun getCustomerByToken(request: HttpServletRequest): Customer?{
+
+        var claims: Claims = JWTAuthorizationFilter().validateJWT(request)
+
+       return customerService.findCustomerByID((claims.get("id") as Int).toLong())
+    }
 
     @GetMapping
     fun findAllUsers() = customerService.getCustomers()
