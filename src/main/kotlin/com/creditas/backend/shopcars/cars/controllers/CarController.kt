@@ -82,4 +82,17 @@ class CarController (
                 if (entity.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
     }
 
+
+    @GetMapping("purcharse/{idCar}")
+    fun purcharseCar(request: HttpServletRequest, @PathVariable idCar: Long): ResponseEntity<String> {
+        carService.findCarById(idCar)?.apply {
+            val carPurcharse = this
+            customerControler.getCustomerByToken(request)?.apply() {
+                this.purchaser_car.add(carPurcharse)
+            }
+            return ResponseEntity.status(HttpStatus.OK).body("Coche comprado correctamente")
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("El id del coche no existe")
+    }
+
 }

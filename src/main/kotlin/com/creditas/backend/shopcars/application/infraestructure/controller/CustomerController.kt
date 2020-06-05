@@ -35,18 +35,6 @@ class CustomerController(private val customerService: CustomerServiceImpl,
                 if (entity != null) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
     }
 
-    @GetMapping("purcharse/{idCar}")
-    fun purcharseCar(request: HttpServletRequest, @PathVariable idCar: Long): ResponseEntity<String> {
-        carService.findCarById(idCar)?.apply {
-            val carPurcharse = this
-            getCustomerByToken(request)?.apply() {
-                this.purchaser_car.add(carPurcharse)
-            }
-            return ResponseEntity.status(HttpStatus.OK).body("Coche comprado correctamente")
-        }
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("El id del coche no existe")
-    }
-
     @PostMapping("/save")
     fun save(@RequestBody customer: Customer) = ResponseEntity.status(HttpStatus.CREATED)
             .body(customerService.saveCustomer(customer))
