@@ -17,7 +17,7 @@ data class Car (
         var number_plate: String = "0000 ABC",
         var fuel_type: Int = 0,
         var km:Int = 0,
-        var color: String = "color",
+        var color: Int = 0,
         var year: Int =0,
         var url_image: String = "https://www.pinclipart.com/picdir/big/174-1749268_cartoon-sport-car-sports-car-cartoon-png-clipart.png",
         @JsonManagedReference(value="model")

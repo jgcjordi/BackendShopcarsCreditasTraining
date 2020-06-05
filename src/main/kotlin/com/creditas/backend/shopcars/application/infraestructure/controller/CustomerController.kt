@@ -3,6 +3,7 @@ package com.creditas.backend.shopcars.application.infraestructure.controller
 import com.creditas.backend.shopcars.application.domain.entities.Customer
 import com.creditas.backend.shopcars.application.infraestructure.security.JWTAuthorizationFilter
 import com.creditas.backend.shopcars.application.services.implementation.CustomerServiceImpl
+import com.creditas.backend.shopcars.cars.services.implementation.CarServiceImpl
 import io.jsonwebtoken.Claims
 import org.apache.juli.logging.LogFactory
 import org.springframework.http.HttpStatus
@@ -13,14 +14,15 @@ import javax.servlet.http.HttpServletRequest
 @RestController
 @CrossOrigin
 @RequestMapping("api/v1/customers")
-class CustomerController (private val customerService: CustomerServiceImpl){
+class CustomerController(private val customerService: CustomerServiceImpl,
+                         private val carService: CarServiceImpl) {
     private val LOGGER = LogFactory.getLog("UserController.class")
 
-    fun getCustomerByToken(request: HttpServletRequest): Customer?{
+    fun getCustomerByToken(request: HttpServletRequest): Customer? {
 
         var claims: Claims = JWTAuthorizationFilter().validateJWT(request)
 
-       return customerService.findCustomerByID((claims.get("id") as Int).toLong())
+        return customerService.findCustomerByID((claims.get("id") as Int).toLong())
     }
 
     @GetMapping
@@ -31,6 +33,18 @@ class CustomerController (private val customerService: CustomerServiceImpl){
         val entity = customerService.findCustomerByID(id)
         return ResponseEntity.status(
                 if (entity != null) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
+    }
+
+    @GetMapping("purcharse/{idCar}")
+    fun purcharseCar(request: HttpServletRequest, @PathVariable idCar: Long): ResponseEntity<String> {
+        carService.findCarById(idCar)?.apply {
+            val carPurcharse = this
+            getCustomerByToken(request)?.apply() {
+                this.purchaser_car.add(carPurcharse)
+            }
+            return ResponseEntity.status(HttpStatus.OK).body("Coche comprado correctamente")
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("El id del coche no existe")
     }
 
     @PostMapping("/save")
@@ -45,9 +59,9 @@ class CustomerController (private val customerService: CustomerServiceImpl){
 
     @PostMapping("/login")
     fun login(@RequestBody customer: Customer, request: HttpServletRequest): ResponseEntity<String> {
-            var logedUser = customerService.login(customer.email, customer.password)
-            var token: String = customerService.getJWT(logedUser, request)
-            return ResponseEntity(token, HttpStatus.OK)
+        var logedUser = customerService.login(customer.email, customer.password)
+        var token: String = customerService.getJWT(logedUser, request)
+        return ResponseEntity(token, HttpStatus.OK)
 
     }
 }
