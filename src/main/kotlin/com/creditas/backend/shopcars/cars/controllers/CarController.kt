@@ -1,6 +1,7 @@
 package com.creditas.backend.shopcars.cars.controllers
 
 import com.creditas.backend.shopcars.application.infraestructure.controller.CustomerController
+import com.creditas.backend.shopcars.application.services.implementation.CustomerServiceImpl
 import com.creditas.backend.shopcars.cars.domain.entities.Brand
 import com.creditas.backend.shopcars.cars.domain.entities.Car
 import com.creditas.backend.shopcars.cars.domain.entities.Model
@@ -21,6 +22,7 @@ class CarController (
         private val carService: CarServiceImpl,
         private val brandsService: BrandServiceImpl,
         private val modelService: ModelServiceImpl,
+        private val customerService: CustomerServiceImpl,
         private val customerControler: CustomerController){
     private val LOGGER = LogFactory.getLog("CarController.class")
 
@@ -88,7 +90,7 @@ class CarController (
             val carPurcharse = this
             customerControler.getCustomerByToken(request)?.apply() {
                 this.purchaser_car.add(carPurcharse)
-                customerControler.save(this)
+                customerService.updateCustomer(this)
                 return ResponseEntity.status(HttpStatus.OK).body("Coche comprado correctamente")
             }
             return ResponseEntity.status(HttpStatus.OK).body("Fallo en la compra del coche")
