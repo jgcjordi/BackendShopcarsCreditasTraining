@@ -1,6 +1,5 @@
 package com.creditas.backend.shopcars.cars.controllers
 
-import com.creditas.backend.shopcars.application.domain.entities.Customer
 import com.creditas.backend.shopcars.application.infraestructure.controller.CustomerController
 import com.creditas.backend.shopcars.cars.domain.entities.Brand
 import com.creditas.backend.shopcars.cars.domain.entities.Car
