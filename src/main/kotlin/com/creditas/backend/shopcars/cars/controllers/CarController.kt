@@ -89,8 +89,10 @@ class CarController (
             val carPurcharse = this
             customerControler.getCustomerByToken(request)?.apply() {
                 this.purchaser_car.add(carPurcharse)
+                customerControler.save(this)
+                return ResponseEntity.status(HttpStatus.OK).body("Coche comprado correctamente")
             }
-            return ResponseEntity.status(HttpStatus.OK).body("Coche comprado correctamente")
+            return ResponseEntity.status(HttpStatus.OK).body("Fallo en la compra del coche")
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("El id del coche no existe")
     }
