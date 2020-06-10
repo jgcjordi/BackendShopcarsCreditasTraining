@@ -46,6 +46,8 @@ class ShopCarsApplication {
                             "/api/v1/customers/save").permitAll()
                     .antMatchers(
                             "/api/v1/cars/open/**").permitAll()
+                    .antMatchers(
+                            "/api/v1/images/get/**").permitAll()
                     .anyRequest().authenticated()
                     .and()
                     .addFilterBefore(JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter::class.java)
@@ -65,6 +67,7 @@ class OnBoot(
         private val customerService: CustomerServiceImpl) : ApplicationRunner {
 
     override fun run(args: ApplicationArguments?) {
+
         val ford = brandService.saveBrand(Brand(name = "Ford"))
         val mustang = modelService.saveModel(Model(name = "Mustang", brand = ford))
         val fiesta = modelService.saveModel(Model(name = "Fiesta", brand = ford))

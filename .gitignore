@@ -29,3 +29,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+##carpetas propias
+/src/main/resources/images/**
