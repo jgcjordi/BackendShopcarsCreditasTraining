@@ -52,7 +52,19 @@ class CarController (
     fun update(@RequestBody car: Car) = carService.updateCar(car)
 
     @DeleteMapping("/{id}")
-    fun deleteById(@PathVariable id: Long) = carService.deleteCarById(id)
+    fun deleteById(@PathVariable id: Long, request: HttpServletRequest):ResponseEntity<String> {
+            carService.findCarById(id)?.apply {
+                val carToDelete = this
+                customerControler.getCustomerByToken(request)?.apply() {
+                    this.seller_car.remove(carToDelete)
+                    customerService.updateCustomer(this)
+                    carService.deleteCarById(carToDelete.id)
+                    return ResponseEntity.status(HttpStatus.OK).body("Coche eliminado del usuario y de la bd")
+                }
+                return ResponseEntity.status(HttpStatus.OK).body("Fallo al eliminar el coche")
+            }
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("El id del coche no existe")
+    }
 
 
     //http://localhost:8080/api/v1/cars/open/brands
