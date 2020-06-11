@@ -9,6 +9,7 @@ import com.creditas.backend.shopcars.cars.domain.entities.Model
 import com.creditas.backend.shopcars.cars.services.implementation.BrandServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.CarServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.ModelServiceImpl
+import org.apache.juli.logging.LogFactory
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -20,6 +21,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.stereotype.Component
+import java.io.File
 import java.time.LocalDate
 
 @SpringBootApplication
@@ -66,7 +68,18 @@ class OnBoot(
         private val brandService: BrandServiceImpl,
         private val customerService: CustomerServiceImpl) : ApplicationRunner {
 
+    private val LOGGER = LogFactory.getLog("OnBoot.class")
     override fun run(args: ApplicationArguments?) {
+
+        //Creación de la carpeta de imagenes si no existe
+        val fileBasePath = "src/main/resources/images"
+        val directory = File(fileBasePath)
+        if (! directory.exists()){
+            directory.mkdir();
+            LOGGER.warn("no existe")
+        }else{
+            LOGGER.warn("existe")
+        }
 
         val ford = brandService.saveBrand(Brand(name = "Ford"))
         val mustang = modelService.saveModel(Model(name = "Mustang", brand = ford))
