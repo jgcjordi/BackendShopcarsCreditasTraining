@@ -90,7 +90,7 @@ class OnBoot(
         val carFiesta = carService.saveCar(Car(number_plate = "4577 JGC", model = fiesta, km = 45030,fuel_type = 1, price = 20000F, color = 0, url_image = "https://static.motor.es/fotos-noticias/2018/05/ford-fiesta-rs-descartado-201846985_1.jpg"))
         val carFiesta2 = carService.saveCar(Car(number_plate = "4732 GHJ", model = fiesta, km = 200000,fuel_type = 4, price = 4000F, color = 6, url_image = "https://static.motor.es/fotos-noticias/2018/05/ford-fiesta-rs-descartado-201846985_1.jpg"))
         val carFocus = carService.saveCar(Car(number_plate = "5689 ZJH", model = focus, km = 5050, price = 15000F,fuel_type = 1, color = 7, url_image = "https://www.coches.com/fotos_historicas/ford/Focus-ST-Line-2018/high_ford_focus-st-line-2018_r34.jpg"))
-
+        val carFocus2 = carService.saveCar(Car(number_plate = "7759 SDS", model = focus, km = 5060, price = 24000F,fuel_type = 2, color = 7, url_image = "https://www.coches.com/fotos_historicas/ford/Focus-ST-Line-2018/high_ford_focus-st-line-2018_r34.jpg"))
         val bmw = brandService.saveBrand(Brand(name = "BMW"))
         val x1 = modelService.saveModel(Model(name = "X1", brand = bmw))
         val s1 = modelService.saveModel(Model(name = "S1", brand = bmw))
@@ -109,7 +109,7 @@ class OnBoot(
         val user2 = customerService.saveCustomer(Customer(seller_car = mutableListOf(carM3,carS1,carX1,carFocus,carMustang,carMustang2,carFiesta,carFiesta2,carFiesta2), name = "Creditas", surname = "Creditas", identification = "12345A", birthday = LocalDate.of(2017, 1, 13), email = "creditas@creditas.com", password = "creditas"))
 
 
-        println(carService.findAllCars()[0].number_plate)
+
     }
 }
 

@@ -5,13 +5,19 @@ import com.creditas.backend.shopcars.cars.domain.entities.Brand
 import com.creditas.backend.shopcars.cars.domain.entities.Car
 import com.creditas.backend.shopcars.cars.domain.entities.Model
 import com.creditas.backend.shopcars.cars.services.ICarService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import javax.persistence.EntityNotFoundException
 
 @Service
 class CarServiceImpl(private val carDao: ICarDao): ICarService{
-    override fun findAllCars(): List<Car> = carDao.findAll()
+    override fun findAllCars(page: Int): Page<Car> {
+        val pages: Pageable = PageRequest.of(page, 9)
+        return carDao.findAll(pages)
+    }
 
     override fun findCarById(id: Long): Car? = carDao.findByIdOrNull(id)
 
@@ -27,11 +33,22 @@ class CarServiceImpl(private val carDao: ICarDao): ICarService{
             carDao.deleteById(this.id)
         } ?: throw EntityNotFoundException("Car id:$id does not exists")  }
 
-    fun findAllCarsNoPurchased(): List<Car> = carDao.findByPurchaserIsNull()
+    fun findAllCarsNoPurchased(page:Int): Page<Car> {
+        val pages: Pageable = PageRequest.of(page, 9)
+        return carDao.findByPurchaserIsNull(pages)
+    }
 
-    fun findAllCarsNoPurchasedOfModel(model: Model): List<Car> = carDao.findByModelAndPurchaserIsNull(model)
+    fun findAllCarsNoPurchasedOfModel(model: Model, page: Int): Page<Car> {
+        val pages: Pageable = PageRequest.of(page, 9)
+        return carDao.findByModelAndPurchaserIsNull(model, pages)
+    }
 
-    fun findAllCarsNoPurchasedOfBrand(brand: Brand): List<Car> = carDao.findAllCarsNoPurchasedOfBrand(brand.id)
+
+    fun findAllCarsNoPurchasedOfBrand(brand: Brand, page:Int): Page<Car> {
+        val pages: Pageable = PageRequest.of(page, 9)
+        return carDao.findAllCarsNoPurchasedOfBrand(brand.id, pages)
+    }
+
 
     fun findPurcharseCars(customerId: Long): List<Car> =carDao.findPurcharseCars(customerId)
 

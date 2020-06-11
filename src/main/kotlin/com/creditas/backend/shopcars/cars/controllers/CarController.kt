@@ -9,17 +9,12 @@ import com.creditas.backend.shopcars.cars.services.implementation.BrandServiceIm
 import com.creditas.backend.shopcars.cars.services.implementation.CarServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.ModelServiceImpl
 import org.apache.juli.logging.LogFactory
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.util.StringUtils
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.multipart.MultipartFile
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder
-import java.io.IOException
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
-import java.nio.file.StandardCopyOption
 import javax.servlet.http.HttpServletRequest
 
 
@@ -31,13 +26,15 @@ class CarController (
         private val brandsService: BrandServiceImpl,
         private val modelService: ModelServiceImpl,
         private val customerService: CustomerServiceImpl,
-        private val customerControler: CustomerController){
+        private val customerController: CustomerController){
     private val LOGGER = LogFactory.getLog("CarController.class")
 
     //http://localhost:8080/api/v1/cars/open
     @GetMapping("/open")
-    fun findAllCarsNoPurchased() = carService.findAllCarsNoPurchased()
-
+    fun findAllCarsNoPurchased(@RequestParam(defaultValue = "0")  page:Int) : ResponseEntity<Page<Car>> {
+        val result = carService.findAllCarsNoPurchased(page)
+        return ResponseEntity(result, HttpStatus.OK)
+    }
 
     //http://localhost:8080/api/v1/cars/1
     @GetMapping("/open/{id}")
@@ -50,7 +47,7 @@ class CarController (
     @PostMapping("/save")
     fun save(request: HttpServletRequest, @RequestBody car: Car): ResponseEntity<Car> {
         val saveCar: Car = carService.saveCar(car)
-        customerControler.getCustomerByToken(request)?.apply {
+        customerController.getCustomerByToken(request)?.apply {
             this.seller_car.add(saveCar)
         }
         return   ResponseEntity.status(HttpStatus.CREATED).body(carService.saveCar(car))
@@ -63,7 +60,7 @@ class CarController (
     fun deleteById(@PathVariable id: Long, request: HttpServletRequest):ResponseEntity<String> {
             carService.findCarById(id)?.apply {
                 val carToDelete = this
-                customerControler.getCustomerByToken(request)?.apply() {
+                customerController.getCustomerByToken(request)?.apply() {
                     this.seller_car.remove(carToDelete)
                     customerService.updateCustomer(this)
                     carService.deleteCarById(carToDelete.id)
@@ -89,18 +86,17 @@ class CarController (
 
     //http://localhost:8080/api/v1/open/cars-of-model
     @PostMapping("/open/cars-of-model")
-    fun findAllCarsNoPurchasedOfModel(@RequestBody model: Model):ResponseEntity<List<Car>> {
-        val entity = carService.findAllCarsNoPurchasedOfModel(model)
-        return ResponseEntity.status(
-                if (entity.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
+    fun findAllCarsNoPurchasedOfModel(@RequestBody model: Model, @RequestParam(defaultValue = "0") page: Int):ResponseEntity<Page<Car>> {
+        val result = carService.findAllCarsNoPurchasedOfModel(model, page)
+        return ResponseEntity(result, HttpStatus.OK)
     }
+
 
     //http://localhost:8080/api/v1/open/cars-of-brand
     @PostMapping("/open/cars-of-brand")
-    fun findAllCarsNoPurchasedOfBrand(@RequestBody brand: Brand):ResponseEntity<List<Car>> {
-        val entity = carService.findAllCarsNoPurchasedOfBrand(brand)
-        return ResponseEntity.status(
-                if (entity.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
+    fun findAllCarsNoPurchasedOfBrand(@RequestBody brand: Brand,  @RequestParam(defaultValue = "0") page: Int):ResponseEntity<Page<Car>> {
+        val result = carService.findAllCarsNoPurchasedOfBrand(brand, page)
+        return ResponseEntity(result, HttpStatus.OK)
     }
 
 
@@ -108,7 +104,7 @@ class CarController (
     fun purcharseCar(request: HttpServletRequest, @PathVariable idCar: Long): ResponseEntity<String> {
         carService.findCarById(idCar)?.apply {
             val carPurcharse = this
-            customerControler.getCustomerByToken(request)?.apply() {
+            customerController.getCustomerByToken(request)?.apply() {
                 this.purchaser_car.add(carPurcharse)
                 customerService.updateCustomer(this)
                 return ResponseEntity.status(HttpStatus.OK).body("Coche comprado correctamente")
@@ -121,7 +117,7 @@ class CarController (
     @GetMapping("/findPurcharseCars")
     fun findPurcharseCars(request: HttpServletRequest): ResponseEntity<List<Car>> {
          var entity: List<Car> = mutableListOf()
-            customerControler.getCustomerByToken(request)?.apply() {
+            customerController.getCustomerByToken(request)?.apply() {
                 entity = carService.findPurcharseCars(this.id)
             }
         return ResponseEntity.status( if (entity.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
@@ -130,7 +126,7 @@ class CarController (
     @GetMapping("/findSellerCars")
     fun findSellerCars(request: HttpServletRequest): ResponseEntity<List<Car>> {
         var entity: List<Car> = mutableListOf()
-        customerControler.getCustomerByToken(request)?.apply() {
+        customerController.getCustomerByToken(request)?.apply() {
             entity = carService.findSellerCars(this.id)
         }
         return ResponseEntity.status( if (entity.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
