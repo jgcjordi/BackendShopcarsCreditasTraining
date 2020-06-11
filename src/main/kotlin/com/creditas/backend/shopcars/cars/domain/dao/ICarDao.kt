@@ -11,8 +11,9 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ICarDao: PagingAndSortingRepository<Car, Long>{
-    fun findByPurchaserIsNull(pageable: Pageable): Page<Car>
-    fun findByModelAndPurchaserIsNull(model:Model, pageable: Pageable): Page<Car>
+
+    fun findByPurchaserIsNullOrderById(pageable: Pageable): Page<Car>
+    fun findByModelAndPurchaserIsNullOrderById(model:Model, pageable: Pageable): Page<Car>
 
     @Query("select * from car  " +
             "inner join model on car.model_id = model.id " +

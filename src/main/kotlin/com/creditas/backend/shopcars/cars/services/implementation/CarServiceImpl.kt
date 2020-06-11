@@ -35,12 +35,12 @@ class CarServiceImpl(private val carDao: ICarDao): ICarService{
 
     fun findAllCarsNoPurchased(page:Int): Page<Car> {
         val pages: Pageable = PageRequest.of(page, 9)
-        return carDao.findByPurchaserIsNull(pages)
+        return carDao.findByPurchaserIsNullOrderById(pages)
     }
 
     fun findAllCarsNoPurchasedOfModel(model: Model, page: Int): Page<Car> {
         val pages: Pageable = PageRequest.of(page, 9)
-        return carDao.findByModelAndPurchaserIsNull(model, pages)
+        return carDao.findByModelAndPurchaserIsNullOrderById(model, pages)
     }
 
 
