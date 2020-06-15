@@ -103,7 +103,7 @@ class OnBoot(
         val carX11 = carService.saveCar(Car(number_plate = "7966 TJG", model = x1, km = 12000, price = 8000F,fuel_type = 5, color = 2, url_image ="https://www.topgear.es/sites/topgear.es/public/styles/855/public/dc/fotos/BMW-X1-2016-D01.jpg?itok=xea3DBnS"))
 
         val carS1 = carService.saveCar(Car(number_plate = "4528 BWG", model = s1, km = 24600, price = 14000F,fuel_type = 6, color = 2, url_image ="https://img.motor16.com/modelos/bmw-serie-1.jpg"))
-        val carS11 = carService.saveCar(Car(number_plate = "6555 WER", model = s1, km = 24600, price = 14000F,fuel_type = 9, color = 2, url_image ="https://img.motor16.com/modelos/bmw-serie-1.jpg"))
+        val carS11 = carService.saveCar(Car(number_plate = "6555 WER", model = s1, km = 25700, price = 15000F,fuel_type = 5, color = 2, url_image ="https://img.motor16.com/modelos/bmw-serie-1.jpg"))
 
         val carM3 = carService.saveCar(Car(number_plate = "7524 ABS", model = m3, km = 15000, price = 44000F,fuel_type = 1, color = 3, url_image ="https://cdn.topgear.es/sites/navi.axelspringer.es/public/styles/1200/public/media/image/2019/09/bmw-m3-2020.jpg?itok=AEZtVXp5"))
         val carM33 = carService.saveCar(Car(number_plate = "8554 WHF", model = m3, km = 45000, price = 4000F,fuel_type = 5, color = 4, url_image ="https://cdn.topgear.es/sites/navi.axelspringer.es/public/styles/1200/public/media/image/2019/09/bmw-m3-2020.jpg?itok=AEZtVXp5"))
