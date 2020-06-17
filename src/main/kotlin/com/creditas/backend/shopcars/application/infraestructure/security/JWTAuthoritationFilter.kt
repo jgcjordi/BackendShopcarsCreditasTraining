@@ -75,7 +75,7 @@ class JWTAuthorizationFilter : OncePerRequestFilter() {
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toList()))
                 .setIssuedAt(Date(System.currentTimeMillis()))
-                .setExpiration(Date(System.currentTimeMillis() + 86400000))
+                .setExpiration(Date(System.currentTimeMillis() + 60000))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY.toByteArray()).compact()
         return "Bearer " + token
     }
