@@ -132,4 +132,14 @@ class CarController (
         return ResponseEntity.status( if (entity.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity)
     }
 
+    //http://localhost:8080/api/v1/findLastPurcharseCar
+    @GetMapping("/findLastPurcharseCar")
+    fun findLastPurcharseCar(request: HttpServletRequest): ResponseEntity<Car> {
+        var entity: List<Car> = mutableListOf()
+        customerController.getCustomerByToken(request)?.apply() {
+            entity = carService.findPurcharseCars(this.id)
+        }
+        return ResponseEntity.status( if (entity.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity[entity.size-1])
+    }
+
 }
