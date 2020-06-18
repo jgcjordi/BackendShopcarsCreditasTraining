@@ -104,7 +104,7 @@ class OnBoot(
         val carX11 = carService.saveCar(Car(number_plate = "7966 TJG", model = x1, km = 12000, price = 28000F,fuel_type = 5, color = 3, year = 2019,  url_image ="https://www.topgear.es/sites/topgear.es/public/styles/855/public/dc/fotos/BMW-X1-2016-D01.jpg?itok=xea3DBnS"))
 
         val carS1 = carService.saveCar(Car(number_plate = "4528 BWG", model = s1, km = 24600, price = 14000F,fuel_type = 3, color = 3, year = 2017, url_image ="https://img.motor16.com/modelos/bmw-serie-1.jpg"))
-        val carS11 = carService.saveCar(Car(number_plate = "6555 WER", model = s1, km = 25700, price = 15000F,fuel_type = 5, color = 5, year = 2019, url_image ="https://img.motor16.com/modelos/bmw-serie-1.jpg"))
+        val carS11 = carService.saveCar(Car(number_plate = "6555 WER", model = s1, km = 25700, price = 15000F,fuel_type = 5, color = 5, year = 2019, url_image ="https://noticias.coches.com/fotos-de-coches/bmw-serie-1-120d-sport-line-2017/334820?foto=1"))
 
 
         val carM3 = carService.saveCar(Car(number_plate = "7524 ABS", model = m3, km = 15000, price = 44000F,fuel_type = 1, color = 1, year = 2014, url_image ="https://hackercar.com/wp-content/uploads/2020/02/bmw-M340d-1.jpg"))
@@ -116,6 +116,34 @@ class OnBoot(
         val carQashqai = carService.saveCar(Car(number_plate = "2475 EJR", model = qashqai, km = 3500,fuel_type = 1, price = 21000F, color = 3, year = 2012, url_image ="https://a.ccdn.es/cnet/contents/media/nissan/qashqai/1234353.jpg/0_122_1280_842//937x624cut/"))
         val carJuke = carService.saveCar(Car(number_plate = "7521 LKR", model = juke, km = 7000, price = 25000F,fuel_type = 1, color = 4, year = 2014, url_image ="https://imagenes-cdn.autofacil.es/multimedia/fotos/2019/10/09/170354/preview2col_mg.jpg?t=1570621209000"))
         val carJuke1 = carService.saveCar(Car(number_plate = "2855 LKR", model = juke, km = 6000, price = 38500F,fuel_type = 2, color = 0, year = 2015, url_image ="https://www.coches.com/fotos_historicas/nissan/Juke/nissan_juke-2014_r4.jpg"))
+
+        val seat = brandService.saveBrand(Brand(name = "Seat"))
+        val leon = modelService.saveModel(Model(name = "Leon", brand = seat))
+        val ibiza = modelService.saveModel(Model(name = "Ibiza", brand = seat))
+        val ateca = modelService.saveModel(Model(name = "Ateca", brand = seat))
+        val carLeon = carService.saveCar(Car(number_plate = "4458 ADS", model = leon, km = 54000,fuel_type = 2, price = 30000F, color = 9, year = 2010,  url_image = "https://noticias.coches.com/fotos-de-coches/seat-leon-fr-2020/372068?foto=6"))
+        val carLeon2 = carService.saveCar(Car(number_plate = "6698 EHT", model = leon, km = 49800,fuel_type = 5, price = 32500F, color = 5, year = 2015, url_image = "https://www.coches.com/fotos_historicas/seat/Leon-Cupra-R-2017/seat_leon-cupra-r-2017_r2.jpg"))
+        val carLeon3 = carService.saveCar(Car(number_plate = "6674 JHF", model = leon, km = 66528, price = 29000F,fuel_type = 4, color = 3, year = 2017,  url_image = "https://noticias.coches.com/fotos-de-coches/seat-leon-ecomotive-2008/63445?foto=15"))
+        val carIbiza = carService.saveCar(Car(number_plate = "8895 KLP", model = ibiza, km = 18962,fuel_type = 1, price = 11000F, color = 1, year = 2014, url_image = "https://static.motor.es/fotos-noticias/2018/05/ford-fiesta-rs-descartado-201846985_1.jpg"))
+        val carIbiza2 = carService.saveCar(Car(number_plate = "5577 BCD", model = ibiza, km = 34500,fuel_type = 4, price = 5000F, color = 3, year = 2013, url_image = "https://www.coches.com/fotos_historicas/ford/Fiesta/6457c76c211873fb8d44b2345dae758f.jpg"))
+        val carIbiza3 = carService.saveCar(Car(number_plate = "4598 HTC", model = ibiza, km = 7952, price = 15000F,fuel_type = 1, color = 7, year = 2012, url_image = "https://www.coches.com/fotos_historicas/ford/Focus-ST-CJ-Pony-Parts-2015/ford_focus-st-cj-pony-parts-2015_r1.jpg"))
+        val carAteca = carService.saveCar(Car(number_plate = "6752 ZOP", model = ateca, km = 35689, price = 4000F,fuel_type = 2, color = 5, year = 2014,url_image = "https://www.coches.com/fotos_historicas/seat/Ateca-2016/seat_ateca-2016_r10.jpg"))
+        val carAteca1 = carService.saveCar(Car(number_plate = "3475 NIR", model = ateca, km = 28600, price = 22000F,fuel_type = 3, color = 9, year = 2016, url_image = "https://noticias.coches.com/fotos-de-coches/seat-ateca-fr-2017/263409?foto=3"))
+
+        val mercedes = brandService.saveBrand(Brand(name = "Mercedes"))
+        val claseA = modelService.saveModel(Model(name = "Clase A", brand = mercedes))
+        val claseC = modelService.saveModel(Model(name = "Clase C", brand = mercedes))
+        val claseGLA = modelService.saveModel(Model(name = "GLA", brand = mercedes))
+        val carClaseA = carService.saveCar(Car(number_plate = "4458 ADS", model = claseA, km = 65000,fuel_type = 2, price = 25000F, color = 3, year = 2010,  url_image = "https://noticias.coches.com/fotos-de-coches/mercedes-clase-a-amg-line-w177-2018/291950?foto=10"))
+        val carClaseA1 = carService.saveCar(Car(number_plate = "6698 EHT", model = claseA, km = 45780,fuel_type = 5, price = 37500F, color = 5, year = 2015, url_image = "https://noticias.coches.com/fotos-de-coches/mercedes-clase-a-250-e-2020/387884?foto=11"))
+        val carClaseA2 = carService.saveCar(Car(number_plate = "6674 JHF", model = claseA, km = 61400, price = 34000F,fuel_type = 4, color = 9, year = 2017,  url_image = "https://noticias.coches.com/fotos-de-coches/brabus-mercedes-clase-a-a250-sport-2013/153681?foto=7"))
+        val carClaseC = carService.saveCar(Car(number_plate = "8895 KLP", model = claseC, km = 19000,fuel_type = 1, price = 17000F, color = 1, year = 2014, url_image = "https://noticias.coches.com/fotos-de-coches/mercedes-200-coupe-amg-line-c205-australia-2016/349079?foto=6"))
+        val carClaseC1 = carService.saveCar(Car(number_plate = "5577 BCD", model = claseC, km = 37000,fuel_type = 4, price = 6000F, color = 3, year = 2013, url_image = "https://noticias.coches.com/fotos-de-coches/mercedes-amg-c-63-s-coupe-205-2018/295370?foto=7"))
+        val carClaseC2 = carService.saveCar(Car(number_plate = "4598 HTC", model = claseC, km = 8000, price = 27000F,fuel_type = 1, color = 8, year = 2012, url_image = "https://noticias.coches.com/fotos-de-coches/mercedes-clase-c-coupe-c250-cdi-2011/66169?foto=15"))
+        val carGLA = carService.saveCar(Car(number_plate = "6752 ZOP", model = claseGLA, km = 34000, price = 40000F,fuel_type = 2, color = 3, year = 2014,url_image = "https://noticias.coches.com/fotos-de-coches/mercedes-clase-gla-250-4matic-amg-line-2020/387887?foto=1"))
+        val carGLA1 = carService.saveCar(Car(number_plate = "3475 NIR", model = claseGLA, km = 26000, price = 28000F,fuel_type = 3, color = 6, year = 2016, url_image = "https://www.coches.com/fotos_historicas/mercedes/Clase-GLA/4a615f629fcafe94ddb1ba0c5d899983.jpg"))
+
+
 
         val user1 = customerService.saveCustomer(Customer(seller_car = mutableListOf(carQashqai,carJuke), purchaser_car = mutableListOf(carMustang), name = "Admin", surname = "Admin", identification = "1234A", birthday = LocalDate.of(2017, 1, 13), email = "admin@admin.com", password = "admin"))
         val user2 = customerService.saveCustomer(Customer(seller_car = mutableListOf(carM3,carS1,carX1,carFocus,carMustang,carMustang2,carFiesta,carFiesta2,carFiesta2), name = "Creditas", surname = "Creditas", identification = "12345A", birthday = LocalDate.of(2017, 1, 13), email = "creditas@creditas.com", password = "creditas"))
