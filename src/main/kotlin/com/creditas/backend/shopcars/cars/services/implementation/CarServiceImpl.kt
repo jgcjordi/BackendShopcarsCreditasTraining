@@ -15,7 +15,7 @@ import javax.persistence.EntityNotFoundException
 @Service
 class CarServiceImpl(private val carDao: ICarDao): ICarService{
     override fun findAllCars(page: Int): Page<Car> {
-        val pages: Pageable = PageRequest.of(page, 9)
+        val pages: Pageable = PageRequest.of(page, 12)
         return carDao.findAll(pages)
     }
 
@@ -34,18 +34,18 @@ class CarServiceImpl(private val carDao: ICarDao): ICarService{
         } ?: throw EntityNotFoundException("Car id:$id does not exists")  }
 
     fun findAllCarsNoPurchased(page:Int): Page<Car> {
-        val pages: Pageable = PageRequest.of(page, 9)
+        val pages: Pageable = PageRequest.of(page, 12)
         return carDao.findByPurchaserIsNullOrderById(pages)
     }
 
     fun findAllCarsNoPurchasedOfModel(model: Model, page: Int): Page<Car> {
-        val pages: Pageable = PageRequest.of(page, 9)
+        val pages: Pageable = PageRequest.of(page, 12)
         return carDao.findByModelAndPurchaserIsNullOrderById(model, pages)
     }
 
 
     fun findAllCarsNoPurchasedOfBrand(brand: Brand, page:Int): Page<Car> {
-        val pages: Pageable = PageRequest.of(page, 9)
+        val pages: Pageable = PageRequest.of(page, 12)
         return carDao.findAllCarsNoPurchasedOfBrand(brand.id, pages)
     }
 
