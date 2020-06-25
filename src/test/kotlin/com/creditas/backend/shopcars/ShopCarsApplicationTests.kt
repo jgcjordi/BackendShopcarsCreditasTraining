@@ -22,7 +22,6 @@ import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.context.WebApplicationContext
-import java.io.File
 
 @SpringBootTest
 class ShopCarsApplicationTests {
@@ -50,9 +49,9 @@ class ShopCarsApplicationTests {
 	}
 
 	//para poder aceptar parametros genericos tiene que ser una funcion inline
-	private inline fun <reified T> ResultActions.bodyTo(mapper: ObjectMapper = jacksonObjectMapper()): Page<T> {
+	private inline fun <reified T> ResultActions.bodyTo(mapper: ObjectMapper = jacksonObjectMapper()):T{
 		println(this)
-		return mapper.readValue(this.andReturn().response.contentAsByteArray) as Page<T>
+		return mapper.readValue(this.andReturn().response.contentAsByteArray)
 	}
 
 	@Test
