@@ -57,9 +57,9 @@ class ShopCarsApplication {
     }
 }
 
-fun main(args: Array<String>) {
-    runApplication<ShopCarsApplication>(*args)
-}
+//fun main(args: Array<String>) {
+//    runApplication<ShopCarsApplication>(*args)
+//}
 
 @Component
 class OnBoot(
