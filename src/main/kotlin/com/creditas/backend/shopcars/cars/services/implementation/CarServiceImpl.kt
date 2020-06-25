@@ -53,4 +53,6 @@ class CarServiceImpl(private val carDao: ICarDao): ICarService{
     fun findPurcharseCars(customerId: Long): List<Car> =carDao.findPurcharseCars(customerId)
 
     fun findSellerCars(customerId: Long): List<Car> =carDao.findSellerCars(customerId)
+
+
 }

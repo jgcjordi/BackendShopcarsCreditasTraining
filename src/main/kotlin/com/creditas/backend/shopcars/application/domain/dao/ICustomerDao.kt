@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ICustomerDao: JpaRepository<Customer, Long>{
-    fun findOneByEmail(email: String): Customer
+    fun findOneByEmail(email: String): Customer?
 }

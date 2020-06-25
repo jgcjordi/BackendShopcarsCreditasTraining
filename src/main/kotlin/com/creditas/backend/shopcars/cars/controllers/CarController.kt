@@ -47,6 +47,7 @@ class CarController (
 
     @PostMapping("/save")
     fun save(request: HttpServletRequest, @RequestBody car: Car): ResponseEntity<Car> {
+
         val saveCar: Car = carService.saveCar(car)
         customerController.getCustomerByToken(request)?.apply {
             this.seller_car.add(saveCar)
