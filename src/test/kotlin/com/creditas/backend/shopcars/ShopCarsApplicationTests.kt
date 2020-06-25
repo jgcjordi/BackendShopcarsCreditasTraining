@@ -1,6 +1,5 @@
 package com.creditas.backend.shopcars
 
-import com.creditas.backend.shopcars.cars.domain.entities.Car
 import com.creditas.backend.shopcars.cars.services.implementation.CarServiceImpl
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -10,17 +9,15 @@ import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.data.domain.Page
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.context.WebApplicationContext
 
 @SpringBootTest
@@ -43,11 +40,6 @@ class ShopCarsApplicationTests {
 				.alwaysDo<DefaultMockMvcBuilder>(MockMvcResultHandlers.print()).build()
 	}
 
-	fun findAllCarsNoPurchased(@RequestParam(defaultValue = "0")  page:Int) : ResponseEntity<Page<Car>> {
-		val result = carService.findAllCarsNoPurchased(page)
-		return ResponseEntity(result, HttpStatus.OK)
-	}
-
 	//para poder aceptar parametros genericos tiene que ser una funcion inline
 	private inline fun <reified T> ResultActions.bodyTo(mapper: ObjectMapper = jacksonObjectMapper()):T{
 		println(this)
@@ -66,10 +58,33 @@ class ShopCarsApplicationTests {
 				.andExpect(MockMvcResultMatchers.status().isOk)
 				.andReturn().response.contentAsString
 
-		println("el string:$x")
-		println("el car string:$carString")
-
 		MatcherAssert.assertThat(carString, Matchers.`is`(Matchers.equalTo(x)))
+	}
+
+	@Test
+	fun FailedfindAllCarsNoPurchased() {
+		var pageRamdom= (50..50000).random()
+		mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/open?page=$pageRamdom"))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest)
+	}
+
+	@Test
+	fun findById() {
+		val carFromService = carService.findAllCarsNoPurchased(0).first()
+
+		mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/open/${carFromService.id}"))
+				.andExpect(status().isOk)
+				.andExpect(jsonPath("$.id", Matchers.`is`(carFromService.id.toInt())))
+
+	}
+
+	@Test
+	fun findByIdIsEmpty() {
+		var idRamdom= (500..50000).random()
+		mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/open/$idRamdom"))
+				.andExpect(MockMvcResultMatchers.status().isNoContent)
+				.andExpect(jsonPath("$").doesNotExist())
+
 	}
 
 }

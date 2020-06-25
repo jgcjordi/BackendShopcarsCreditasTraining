@@ -33,7 +33,8 @@ class CarController (
     @GetMapping("/open")
     fun findAllCarsNoPurchased(@RequestParam(defaultValue = "0")  page:Int) : ResponseEntity<Page<Car>> {
         val result = carService.findAllCarsNoPurchased(page)
-        return ResponseEntity(result, HttpStatus.OK)
+        return ResponseEntity.status(
+                if(result.content.size!=0) HttpStatus.OK else HttpStatus.BAD_REQUEST).body(result)
     }
 
     //http://localhost:8080/api/v1/cars/1
