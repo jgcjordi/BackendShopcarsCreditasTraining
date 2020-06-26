@@ -12,7 +12,7 @@ import javax.persistence.*
 data class Car (
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        var id : Long = 0,
+        var id : Long = -1,
         var price: Float = 0f,
         var number_plate: String = "0000 ABC",
         var fuel_type: Int = 0,

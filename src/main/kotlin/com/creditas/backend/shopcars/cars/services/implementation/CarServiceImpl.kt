@@ -26,7 +26,6 @@ class CarServiceImpl(private val carDao: ICarDao): ICarService{
         return if(!carDao.existsById(car.id)) carDao.save(car)
         else {
             throw DuplicateKeyException("Car id:${car.id} duplicate key exception")
-
         }
     }
 
