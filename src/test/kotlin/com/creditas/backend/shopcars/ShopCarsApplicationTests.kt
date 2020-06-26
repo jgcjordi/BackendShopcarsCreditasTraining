@@ -8,6 +8,8 @@ import com.creditas.backend.shopcars.cars.domain.entities.Model
 import com.creditas.backend.shopcars.cars.services.implementation.BrandServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.CarServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.ModelServiceImpl
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -82,7 +84,7 @@ class ShopCarsApplicationTests {
 
     @Test
     fun findAllCarsNoPurchased() {
-        val carsFromService = carService.findAllCarsNoPurchased(1)
+/*        val carsFromService = carService.findAllCarsNoPurchased(1)
         val carString: String = mapper.writeValueAsString(carsFromService)
 
         mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/open?page=1"))
@@ -92,7 +94,21 @@ class ShopCarsApplicationTests {
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andReturn().response.contentAsString
 
-        MatcherAssert.assertThat(carString, Matchers.`is`(Matchers.equalTo(x)))
+        MatcherAssert.assertThat(carString, Matchers.`is`(Matchers.equalTo(x)))*/
+
+        val page = 1
+        val carsFromService:List<Car> = carService.findAllCarsNoPurchased(page).content
+        val carsString: String = mapper.writeValueAsString(carsFromService)
+        val carsListFromService = mapper.readValue(carsString, object : TypeReference<List<Car>>(){}) as List<Car>
+
+        val jsonString = mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/open?page=$page"))
+                .andExpect(status().isOk)
+                .andReturn().response.contentAsString
+
+        val jsonCarList: JsonNode = mapper.readTree(jsonString).path("content")
+        val resultCarList = mapper.readValue(jsonCarList.toString(), object : TypeReference<List<Car>>(){}) as List<Car>
+
+        MatcherAssert.assertThat(carsListFromService, Matchers.`is`(Matchers.equalTo(resultCarList)))
     }
 
     @Test
