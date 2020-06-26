@@ -154,7 +154,7 @@ class ShopCarsApplicationTests {
                 .andExpect(status().isCreated)
                 .bodyTo(mapper)
         println(carFromApi.number_plate)
-        MatcherAssert.assertThat(carService.findCarById(carFromApi.id)?.number_plate, Matchers.`is`(carMustang.number_plate))
+        MatcherAssert.assertThat(carService.findCarById(carFromApi.id)?.number_plate, Matchers.`is`(car.number_plate))
     }
 
 
