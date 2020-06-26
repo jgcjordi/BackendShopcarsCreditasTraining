@@ -251,6 +251,39 @@ class ShopCarsApplicationTests {
     }
 
     @Test
+    fun findAllCarsNoPurchasedOfModel() {
+        val page = 0
+        val brand = brandService.findAllBrands().first()
+        val model = modelService.findAllModelsByBrand(brand).first()
+        val cars = carService.findAllCarsNoPurchasedOfModel(model, page)
+        val carsString: String = mapper.writeValueAsString(cars)
+
+        val jsonString = mockMvc.perform(MockMvcRequestBuilders.post("$carsEndPoint/open/cars-of-model?page=$page")
+                .body(model, mapper))
+                .andExpect(status().isOk)
+                .andReturn().response.contentAsString
+
+        MatcherAssert.assertThat(carsString, Matchers.`is`(Matchers.equalTo(jsonString)))
+    }
+
+    @Test
+    fun findAllCarsNoPurchasedOfBrand() {
+        val page = 0
+        val brand = brandService.findAllBrands().first()
+        val cars = carService.findAllCarsNoPurchasedOfBrand(brand, page)
+        val carsString: String = mapper.writeValueAsString(cars)
+
+        val jsonString = mockMvc.perform(MockMvcRequestBuilders.post("$carsEndPoint/open/cars-of-brand?page=$page")
+                .body(brand, mapper))
+                .andExpect(status().isOk)
+                .andReturn().response.contentAsString
+
+        MatcherAssert.assertThat(carsString, Matchers.`is`(Matchers.equalTo(jsonString)))
+    }
+
+
+
+    @Test
     fun findAllModelsOfBrand(){
         val brand = brandService.findAllBrands().first()
         val modelsFromService = modelService.findAllModelsByBrand(brand)
