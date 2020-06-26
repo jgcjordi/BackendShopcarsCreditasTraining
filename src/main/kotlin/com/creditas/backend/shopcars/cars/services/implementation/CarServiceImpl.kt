@@ -5,6 +5,7 @@ import com.creditas.backend.shopcars.cars.domain.entities.Brand
 import com.creditas.backend.shopcars.cars.domain.entities.Car
 import com.creditas.backend.shopcars.cars.domain.entities.Model
 import com.creditas.backend.shopcars.cars.services.ICarService
+import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -21,7 +22,13 @@ class CarServiceImpl(private val carDao: ICarDao): ICarService{
 
     override fun findCarById(id: Long): Car? = carDao.findByIdOrNull(id)
 
-    override fun saveCar(car: Car): Car = carDao.save(car)
+    override fun saveCar(car: Car): Car {
+        return if(!carDao.existsById(car.id)) carDao.save(car)
+        else {
+            throw DuplicateKeyException("Car id:${car.id} duplicate key exception")
+
+        }
+    }
 
     override fun updateCar(car: Car): Car{
         return if(carDao.existsById(car.id)) carDao.save(car)

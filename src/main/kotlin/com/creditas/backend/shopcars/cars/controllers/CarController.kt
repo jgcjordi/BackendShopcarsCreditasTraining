@@ -47,12 +47,16 @@ class CarController (
 
     @PostMapping("/save")
     fun save(request: HttpServletRequest, @RequestBody car: Car): ResponseEntity<Car> {
-
-        val saveCar: Car = carService.saveCar(car)
-        customerController.getCustomerByToken(request)?.apply {
-            this.seller_car.add(saveCar)
+        return try{
+            val saveCar: Car = carService.saveCar(car)
+            customerController.getCustomerByToken(request)?.apply {
+                this.seller_car.add(saveCar)
+            }
+            ResponseEntity.status(HttpStatus.CREATED).body(carService.saveCar(car))
         }
-        return   ResponseEntity.status(HttpStatus.CREATED).body(carService.saveCar(car))
+        catch (e:Exception){
+            ResponseEntity.status(HttpStatus.CONFLICT).body(null)
+        }
     }
 
     @PutMapping("/update")

@@ -145,7 +145,7 @@ class ShopCarsApplicationTests {
     fun saveSuccessfully() {
         val brand = brandService.findAllBrands().first()
         val model = modelService.findAllModelsByBrand(brand).first()
-        val car = Car(number_plate = "2385 AYR", model = model, km = 50000, fuel_type = 2, price = 300000F, color = 9, year = 2010, url_image = "https://cdn.topgear.es/sites/navi.axelspringer.es/public/styles/1200/public/media/image/2017/05/prueba-ford-mustang-gt_19.jpg?itok=037w0axH")
+        val car = Car(number_plate = "6589 AYR", model = model, km = 50000, fuel_type = 2, price = 300000F, color = 9, year = 2010, url_image = "https://cdn.topgear.es/sites/navi.axelspringer.es/public/styles/1200/public/media/image/2017/05/prueba-ford-mustang-gt_19.jpg?itok=037w0axH")
         val bearer = doLogin()
         val carFromApi: Car = mockMvc.perform(MockMvcRequestBuilders.post("$carsEndPoint/save")
                 .header("Authorization", bearer)
@@ -156,6 +156,18 @@ class ShopCarsApplicationTests {
         println(carFromApi.number_plate)
         MatcherAssert.assertThat(carService.findCarById(carFromApi.id)?.number_plate, Matchers.`is`(car.number_plate))
     }
+    @Test
+    fun saveDuplicateEntity(){
+        val carsFromService = carService.findAllCarsNoPurchased(0).content
+        assert(!carsFromService.isEmpty()){"Should not be empty"}
+        val car = carsFromService.first();
+        val bearer = doLogin()
+        mockMvc.perform(MockMvcRequestBuilders.post("$carsEndPoint/save")
+                .header("Authorization", bearer)
+                .body(car, mapper))
+                .andExpect(status().isConflict)
+                //.andExpect(jsonPath("$.title", Matchers.`is`("DuplicateKeyException")))
 
+    }
 
 }
