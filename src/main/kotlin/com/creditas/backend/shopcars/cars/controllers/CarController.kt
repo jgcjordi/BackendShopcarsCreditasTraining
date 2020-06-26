@@ -78,7 +78,12 @@ class CarController (
 
     //http://localhost:8080/api/v1/cars/open/brands
     @GetMapping("/open/brands")
-    fun findAllBrands() = brandsService.findAllBrands()
+    fun findAllBrands():ResponseEntity<List<Brand>>{
+        val list = brandsService.findAllBrands();
+        return ResponseEntity
+                .status(if (list.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT)
+                .body(list)
+    }
 
     //http://localhost:8080/api/v1/cars/open/models-of-brand
     @PostMapping("/open/models-of-brand")

@@ -2,7 +2,9 @@ package com.creditas.backend.shopcars
 
 import com.creditas.backend.shopcars.application.domain.entities.Customer
 import com.creditas.backend.shopcars.application.services.implementation.CustomerServiceImpl
+import com.creditas.backend.shopcars.cars.domain.entities.Brand
 import com.creditas.backend.shopcars.cars.domain.entities.Car
+import com.creditas.backend.shopcars.cars.domain.entities.Model
 import com.creditas.backend.shopcars.cars.services.implementation.BrandServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.CarServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.ModelServiceImpl
@@ -90,18 +92,6 @@ class ShopCarsApplicationTests {
 
     @Test
     fun findAllCarsNoPurchased() {
-/*        val carsFromService = carService.findAllCarsNoPurchased(1)
-        val carString: String = mapper.writeValueAsString(carsFromService)
-
-        mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/open?page=1"))
-                .andExpect(MockMvcResultMatchers.status().isOk)
-
-        val x = mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/open?page=1"))
-                .andExpect(MockMvcResultMatchers.status().isOk)
-                .andReturn().response.contentAsString
-
-        MatcherAssert.assertThat(carString, Matchers.`is`(Matchers.equalTo(x)))*/
-
         val page = 1
         val carsFromService: List<Car> = carService.findAllCarsNoPurchased(page).content
         val carsString: String = mapper.writeValueAsString(carsFromService)
@@ -248,7 +238,6 @@ class ShopCarsApplicationTests {
         mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/findPurcharseCars")
                 .header("Authorization", bearer))
                 .andExpect(status().isOk)
-
     }
 
     @Test
@@ -290,5 +279,62 @@ class ShopCarsApplicationTests {
                 .andExpect(status().isNoContent)
     }
 
+    @Test
+    fun findAllBrands() {
+        val brandsFromService = brandService.findAllBrands()
 
+        val brandsString: String = mapper.writeValueAsString(brandsFromService)
+
+        val  jsonString = mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/open/brands"))
+                .andExpect(status().isOk)
+                .andReturn().response.contentAsString
+        val resultBrandList = mapper.readValue(jsonString, object : TypeReference<List<Brand>>() {}) as List<Brand>
+        val resultBrandListFromService = mapper.readValue(brandsString, object : TypeReference<List<Brand>>() {}) as List<Brand>
+        MatcherAssert.assertThat(resultBrandListFromService, Matchers.`is`(Matchers.equalTo(resultBrandList)))
+    }
+
+    @Test
+    fun findAllCarsNoPurchasedOfModel() {
+        val page = 0
+        val brand = brandService.findAllBrands().first()
+        val model = modelService.findAllModelsByBrand(brand).first()
+        val cars = carService.findAllCarsNoPurchasedOfModel(model, page)
+        val carsString: String = mapper.writeValueAsString(cars)
+
+        val jsonString = mockMvc.perform(MockMvcRequestBuilders.post("$carsEndPoint/open/cars-of-model?page=$page")
+                .body(model, mapper))
+                .andExpect(status().isOk)
+                .andReturn().response.contentAsString
+
+        MatcherAssert.assertThat(carsString, Matchers.`is`(Matchers.equalTo(jsonString)))
+    }
+
+    @Test
+    fun findAllCarsNoPurchasedOfBrand() {
+        val page = 0
+        val brand = brandService.findAllBrands().first()
+        val cars = carService.findAllCarsNoPurchasedOfBrand(brand, page)
+        val carsString: String = mapper.writeValueAsString(cars)
+
+        val jsonString = mockMvc.perform(MockMvcRequestBuilders.post("$carsEndPoint/open/cars-of-brand?page=$page")
+                .body(brand, mapper))
+                .andExpect(status().isOk)
+                .andReturn().response.contentAsString
+
+        MatcherAssert.assertThat(carsString, Matchers.`is`(Matchers.equalTo(jsonString)))
+    }
+
+    @Test
+    fun findAllModelsOfBrand(){
+        val brand = brandService.findAllBrands().first()
+        val modelsFromService = modelService.findAllModelsByBrand(brand)
+        val modelsString = mapper.writeValueAsString(modelsFromService)
+        val jsonString =  mockMvc.perform(MockMvcRequestBuilders.post("$carsEndPoint/open/models-of-brand")
+                .body(brand,mapper))
+                .andExpect(status().isOk)
+                .andReturn().response.contentAsString
+
+
+        MatcherAssert.assertThat(modelsString, Matchers.`is`(Matchers.equalTo(jsonString)))
+    }
 }
