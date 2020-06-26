@@ -2,9 +2,7 @@ package com.creditas.backend.shopcars
 
 import com.creditas.backend.shopcars.application.domain.entities.Customer
 import com.creditas.backend.shopcars.application.services.implementation.CustomerServiceImpl
-import com.creditas.backend.shopcars.cars.domain.entities.Brand
 import com.creditas.backend.shopcars.cars.domain.entities.Car
-import com.creditas.backend.shopcars.cars.domain.entities.Model
 import com.creditas.backend.shopcars.cars.services.implementation.BrandServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.CarServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.ModelServiceImpl
@@ -30,7 +28,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
-import java.awt.print.Pageable
 import java.time.LocalDate
 
 @SpringBootTest
@@ -97,16 +94,16 @@ class ShopCarsApplicationTests {
         MatcherAssert.assertThat(carString, Matchers.`is`(Matchers.equalTo(x)))*/
 
         val page = 1
-        val carsFromService:List<Car> = carService.findAllCarsNoPurchased(page).content
+        val carsFromService: List<Car> = carService.findAllCarsNoPurchased(page).content
         val carsString: String = mapper.writeValueAsString(carsFromService)
-        val carsListFromService = mapper.readValue(carsString, object : TypeReference<List<Car>>(){}) as List<Car>
+        val carsListFromService = mapper.readValue(carsString, object : TypeReference<List<Car>>() {}) as List<Car>
 
         val jsonString = mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/open?page=$page"))
                 .andExpect(status().isOk)
                 .andReturn().response.contentAsString
 
         val jsonCarList: JsonNode = mapper.readTree(jsonString).path("content")
-        val resultCarList = mapper.readValue(jsonCarList.toString(), object : TypeReference<List<Car>>(){}) as List<Car>
+        val resultCarList = mapper.readValue(jsonCarList.toString(), object : TypeReference<List<Car>>() {}) as List<Car>
 
         MatcherAssert.assertThat(carsListFromService, Matchers.`is`(Matchers.equalTo(resultCarList)))
     }
@@ -130,8 +127,8 @@ class ShopCarsApplicationTests {
 
     @Test
     fun findByIdIsEmpty() {
-        var idRamdom = (500..50000).random()
-        mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/open/$idRamdom"))
+        var idRandom = (500..50000).random()
+        mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/open/$idRandom"))
                 .andExpect(MockMvcResultMatchers.status().isNoContent)
                 .andExpect(jsonPath("$").doesNotExist())
 
@@ -169,21 +166,72 @@ class ShopCarsApplicationTests {
         )
                 .andExpect(status().isCreated)
                 .bodyTo(mapper)
-        println(carFromApi.number_plate)
+
         MatcherAssert.assertThat(carService.findCarById(carFromApi.id)?.number_plate, Matchers.`is`(car.number_plate))
     }
+
     @Test
-    fun saveDuplicateEntity(){
+    fun saveDuplicateEntity() {
         val carsFromService = carService.findAllCarsNoPurchased(0).content
-        assert(!carsFromService.isEmpty()){"Should not be empty"}
+        assert(!carsFromService.isEmpty()) { "Should not be empty" }
         val car = carsFromService.first();
         val bearer = doLogin()
         mockMvc.perform(MockMvcRequestBuilders.post("$carsEndPoint/save")
                 .header("Authorization", bearer)
                 .body(car, mapper))
                 .andExpect(status().isConflict)
-                //.andExpect(jsonPath("$.title", Matchers.`is`("DuplicateKeyException")))
+        //.andExpect(jsonPath("$.title", Matchers.`is`("DuplicateKeyException")))
 
     }
+
+    @Test
+    fun deleteById() {
+        val carFromService = carService.findAllCarsNoPurchased(0).first()
+        val bearer = doLogin()
+        mockMvc.perform(MockMvcRequestBuilders.delete("$carsEndPoint/${carFromService.id}")
+                .header("Authorization", bearer))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$", Matchers.`is`("Coche eliminado del usuario y de la bd")))
+
+        assert((carService.findCarById(carFromService.id) == null))
+
+    }
+
+    @Test
+    fun deleteByIdFail() {
+        var idRandom = (500..50000).random()
+        val bearer = doLogin()
+        mockMvc.perform(MockMvcRequestBuilders.delete("$carsEndPoint/${idRandom}")
+                .header("Authorization", bearer))
+                .andExpect(status().isNoContent)
+                .andExpect(jsonPath("$", Matchers.`is`("El id del coche no existe")))
+
+    }
+
+    @Test
+    fun purchaseCar() {
+        val carFromService = carService.findAllCarsNoPurchased(2).first()
+        val bearer = doLogin()
+        mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/purcharse/${carFromService.id}")
+                .header("Authorization", bearer))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$", Matchers.`is`("Coche comprado correctamente")))
+
+        /*   val x= mapper.writeValueAsString(carService.findCarById(carFromService.id)!!.purchaser.size).toInt()
+           assert(x!=0)*/
+
+    }
+
+    @Test
+    fun purchaseCarFail() {
+        var idRandom = (500..50000).random()
+        val bearer = doLogin()
+        mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/purcharse/${idRandom}")
+                .header("Authorization", bearer))
+                .andExpect(status().isNoContent)
+                .andExpect(jsonPath("$", Matchers.`is`("El id del coche no existe")))
+
+    }
+
 
 }

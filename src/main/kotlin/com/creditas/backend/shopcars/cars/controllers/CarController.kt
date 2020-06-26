@@ -10,8 +10,6 @@ import com.creditas.backend.shopcars.cars.services.implementation.CarServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.ModelServiceImpl
 import org.apache.juli.logging.LogFactory
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -72,7 +70,7 @@ class CarController (
                     carService.deleteCarById(carToDelete.id)
                     return ResponseEntity.status(HttpStatus.OK).body("Coche eliminado del usuario y de la bd")
                 }
-                return ResponseEntity.status(HttpStatus.OK).body("Fallo al eliminar el coche")
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fallo al eliminar el coche")
             }
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("El id del coche no existe")
     }
@@ -107,15 +105,15 @@ class CarController (
 
 
     @GetMapping("purcharse/{idCar}")
-    fun purcharseCar(request: HttpServletRequest, @PathVariable idCar: Long): ResponseEntity<String> {
+    fun purchaseCar(request: HttpServletRequest, @PathVariable idCar: Long): ResponseEntity<String> {
         carService.findCarById(idCar)?.apply {
-            val carPurcharse = this
+            val carPurchase = this
             customerController.getCustomerByToken(request)?.apply() {
-                this.purchaser_car.add(carPurcharse)
+                this.purchaser_car.add(carPurchase)
                 customerService.updateCustomer(this)
                 return ResponseEntity.status(HttpStatus.OK).body("Coche comprado correctamente")
             }
-            return ResponseEntity.status(HttpStatus.OK).body("Fallo en la compra del coche")
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fallo en la compra del coche")
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("El id del coche no existe")
     }
