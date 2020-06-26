@@ -2,7 +2,9 @@ package com.creditas.backend.shopcars
 
 import com.creditas.backend.shopcars.application.domain.entities.Customer
 import com.creditas.backend.shopcars.application.services.implementation.CustomerServiceImpl
+import com.creditas.backend.shopcars.cars.domain.entities.Brand
 import com.creditas.backend.shopcars.cars.domain.entities.Car
+import com.creditas.backend.shopcars.cars.domain.entities.Model
 import com.creditas.backend.shopcars.cars.services.implementation.BrandServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.CarServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.ModelServiceImpl
@@ -233,5 +235,32 @@ class ShopCarsApplicationTests {
 
     }
 
+    @Test
+    fun findAllBrands() {
+        val brandsFromService = brandService.findAllBrands()
 
+        val brandsString: String = mapper.writeValueAsString(brandsFromService)
+
+        val  jsonString = mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/open/brands"))
+                .andExpect(status().isOk)
+                .andReturn().response.contentAsString
+
+        val resultBrandList = mapper.readValue(jsonString, object : TypeReference<List<Brand>>() {}) as List<Brand>
+        val resultBrandListFromService = mapper.readValue(brandsString, object : TypeReference<List<Brand>>() {}) as List<Brand>
+        MatcherAssert.assertThat(resultBrandListFromService, Matchers.`is`(Matchers.equalTo(resultBrandList)))
+    }
+
+    @Test
+    fun findAllModelsOfBrand(){
+        val brand = brandService.findAllBrands().first()
+        val modelsFromService = modelService.findAllModelsByBrand(brand)
+        val modelsString = mapper.writeValueAsString(modelsFromService)
+        val jsonString =  mockMvc.perform(MockMvcRequestBuilders.post("$carsEndPoint/open/models-of-brand")
+                .body(brand,mapper))
+                .andExpect(status().isOk)
+                .andReturn().response.contentAsString
+
+
+        MatcherAssert.assertThat(modelsString, Matchers.`is`(Matchers.equalTo(jsonString)))
+    }
 }
