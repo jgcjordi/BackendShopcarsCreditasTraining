@@ -139,11 +139,15 @@ class CarController (
     //http://localhost:8080/api/v1/findLastPurcharseCar
     @GetMapping("/findLastPurcharseCar")
     fun findLastPurcharseCar(request: HttpServletRequest): ResponseEntity<Car> {
-        var entity: List<Car> = mutableListOf()
-        customerController.getCustomerByToken(request)?.apply() {
-            entity = carService.findPurcharseCars(this.id)
+        return try {
+            var entity: List<Car> = mutableListOf()
+            customerController.getCustomerByToken(request)?.apply() {
+                entity = carService.findPurcharseCars(this.id)
+            }
+            ResponseEntity.status(HttpStatus.OK).body(entity[entity.size - 1])
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.NO_CONTENT).body(null)
         }
-        return ResponseEntity.status( if (entity.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT).body(entity[entity.size-1])
     }
 
 }

@@ -147,6 +147,7 @@ class OnBoot(
 
         val user1 = customerService.saveCustomer(Customer(seller_car = mutableListOf(carQashqai,carJuke), purchaser_car = mutableListOf(carMustang), name = "Admin", surname = "Admin", identification = "1234A", birthday = LocalDate.of(2017, 1, 13), email = "admin@admin.com", password = "admin"))
         val user2 = customerService.saveCustomer(Customer(seller_car = mutableListOf(carM3,carS1,carX1,carFocus,carMustang,carMustang2,carFiesta,carFiesta2,carFiesta2), name = "Creditas", surname = "Creditas", identification = "12345A", birthday = LocalDate.of(2017, 1, 13), email = "creditas@creditas.com", password = "creditas"))
+        val user3 = customerService.saveCustomer(Customer (name = "Creditas1", surname = "Creditas1", identification = "123456A", birthday = LocalDate.of(2017, 1, 13), email = "creditas1@creditas.com", password = "creditas1"))
 
 
 
