@@ -47,7 +47,6 @@ class CustomerController(private val customerService: CustomerServiceImpl,
 
     @PostMapping("/login")
     fun login(@RequestBody customer: Customer, request: HttpServletRequest): ResponseEntity<String> {
-
         try{
             var logedUser = customerService.login(customer.email, customer.password)
              var token = customerService.getJWT(logedUser, request)
@@ -57,7 +56,5 @@ class CustomerController(private val customerService: CustomerServiceImpl,
 
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
-
-
     }
 }
