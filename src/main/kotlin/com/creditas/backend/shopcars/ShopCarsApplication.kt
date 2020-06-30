@@ -75,7 +75,7 @@ class OnBoot(
         val fileBasePath = "src/main/resources/images"
         val directory = File(fileBasePath)
         if (! directory.exists()){
-            directory.mkdir();
+            directory.mkdir()
             LOGGER.warn("no existe")
         }else{
             LOGGER.warn("existe")

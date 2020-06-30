@@ -1,10 +1,8 @@
 package com.creditas.backend.shopcars
 
 import com.creditas.backend.shopcars.application.domain.entities.Customer
-import com.creditas.backend.shopcars.application.services.implementation.CustomerServiceImpl
 import com.creditas.backend.shopcars.cars.domain.entities.Brand
 import com.creditas.backend.shopcars.cars.domain.entities.Car
-import com.creditas.backend.shopcars.cars.domain.entities.Model
 import com.creditas.backend.shopcars.cars.services.implementation.BrandServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.CarServiceImpl
 import com.creditas.backend.shopcars.cars.services.implementation.ModelServiceImpl
@@ -24,7 +22,6 @@ import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
@@ -34,8 +31,6 @@ import java.time.LocalDate
 
 @SpringBootTest
 class ShopCarsApplicationTests {
-    @Autowired
-    private lateinit var customerService: CustomerServiceImpl
 
     @Autowired
     private lateinit var webApplicationContext: WebApplicationContext
@@ -74,20 +69,18 @@ class ShopCarsApplicationTests {
     fun doLogin(): String {
         val customer = Customer(name = "Admin", surname = "Admin", identification = "1234A", birthday = LocalDate.of(2017, 1, 13), email = "admin@admin.com", password = "admin")
 
-        var bearer = mockMvc.perform(MockMvcRequestBuilders.post("$customerEndPoint/login")
+        return mockMvc.perform(MockMvcRequestBuilders.post("$customerEndPoint/login")
                 .body(data = customer, mapper = mapper))
                 .andExpect(status().isOk)
                 .andReturn().response.contentAsString
-        return bearer;
     }
     fun doLoginFail(): String {
         val customer = Customer(name = "Creditas1", surname = "Creditas1", identification = "123456A", birthday = LocalDate.of(2017, 1, 13), email = "creditas1@creditas.com", password = "creditas1")
 
-        var bearer = mockMvc.perform(MockMvcRequestBuilders.post("$customerEndPoint/login")
+        return mockMvc.perform(MockMvcRequestBuilders.post("$customerEndPoint/login")
                 .body(data = customer, mapper = mapper))
                 .andExpect(status().isOk)
                 .andReturn().response.contentAsString
-        return bearer;
     }
 
     @Test
@@ -109,9 +102,9 @@ class ShopCarsApplicationTests {
 
     @Test
     fun failedFindAllCarsNoPurchased() {
-        var pageRandom = (50..50000).random()
+        val pageRandom = (50..50000).random()
         mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/open?page=$pageRandom"))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest)
+                .andExpect(status().isBadRequest)
     }
 
     @Test
@@ -126,9 +119,9 @@ class ShopCarsApplicationTests {
 
     @Test
     fun findByIdIsEmpty() {
-        var idRandom = (500..50000).random()
+        val idRandom = (500..50000).random()
         mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/open/$idRandom"))
-                .andExpect(MockMvcResultMatchers.status().isNoContent)
+                .andExpect(status().isNoContent)
                 .andExpect(jsonPath("$").doesNotExist())
 
     }
@@ -137,11 +130,9 @@ class ShopCarsApplicationTests {
     fun login() {
         val customer = Customer(name = "Creditas", surname = "Creditas", identification = "12345A", birthday = LocalDate.of(2017, 1, 13), email = "creditas@creditas.com", password = "creditas")
 
-        var bearer = mockMvc.perform(MockMvcRequestBuilders.post("$customerEndPoint/login")
+        mockMvc.perform(MockMvcRequestBuilders.post("$customerEndPoint/login")
                 .body(data = customer, mapper = mapper))
                 .andExpect(status().isOk)
-
-
     }
 
     @Test
@@ -172,8 +163,8 @@ class ShopCarsApplicationTests {
     @Test
     fun saveDuplicateEntity() {
         val carsFromService = carService.findAllCarsNoPurchased(0).content
-        assert(!carsFromService.isEmpty()) { "Should not be empty" }
-        val car = carsFromService.first();
+        assert(carsFromService.isNotEmpty()) { "Should not be empty" }
+        val car = carsFromService.first()
         val bearer = doLogin()
         mockMvc.perform(MockMvcRequestBuilders.post("$carsEndPoint/save")
                 .header("Authorization", bearer)
@@ -193,12 +184,11 @@ class ShopCarsApplicationTests {
                 .andExpect(jsonPath("$", Matchers.`is`("Coche eliminado del usuario y de la bd")))
 
         assert((carService.findCarById(carFromService.id) == null))
-
     }
 
     @Test
     fun deleteByIdFail() {
-        var idRandom = (500..50000).random()
+        val idRandom = (500..50000).random()
         val bearer = doLogin()
         mockMvc.perform(MockMvcRequestBuilders.delete("$carsEndPoint/${idRandom}")
                 .header("Authorization", bearer))
@@ -218,12 +208,11 @@ class ShopCarsApplicationTests {
 
         /*   val x= mapper.writeValueAsString(carService.findCarById(carFromService.id)!!.purchaser.size).toInt()
            assert(x!=0)*/
-
     }
 
     @Test
     fun purchaseCarFail() {
-        var idRandom = (500..50000).random()
+        val idRandom = (500..50000).random()
         val bearer = doLogin()
         mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/purcharse/${idRandom}")
                 .header("Authorization", bearer))
@@ -233,7 +222,7 @@ class ShopCarsApplicationTests {
     }
 
     @Test
-    fun findPurcharseCars() {
+    fun findPurchaseCars() {
         val bearer = doLogin()
         mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/findPurcharseCars")
                 .header("Authorization", bearer))
@@ -241,7 +230,7 @@ class ShopCarsApplicationTests {
     }
 
     @Test
-    fun findPurcharseCarsFail() {
+    fun findPurchaseCarsFail() {
         val bearer = doLoginFail()
         mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/findPurcharseCars")
                 .header("Authorization", bearer))
@@ -265,14 +254,14 @@ class ShopCarsApplicationTests {
     }
 
     @Test
-    fun findLastPurcharseCar() {
+    fun findLastPurchaseCar() {
         val bearer = doLogin()
         mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/findLastPurcharseCar")
                 .header("Authorization", bearer))
                 .andExpect(status().isOk)
     }
     @Test
-    fun findLastPurcharseCarFail() {
+    fun findLastPurchaseCarFail() {
         val bearer = doLoginFail()
         mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/findLastPurcharseCar")
                 .header("Authorization", bearer))
