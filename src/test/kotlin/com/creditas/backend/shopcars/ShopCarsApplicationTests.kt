@@ -1,6 +1,7 @@
 package com.creditas.backend.shopcars
 
 import com.creditas.backend.shopcars.application.domain.entities.Customer
+import com.creditas.backend.shopcars.application.services.implementation.CustomerServiceImpl
 import com.creditas.backend.shopcars.cars.domain.entities.Brand
 import com.creditas.backend.shopcars.cars.domain.entities.Car
 import com.creditas.backend.shopcars.cars.services.implementation.BrandServiceImpl
@@ -42,6 +43,9 @@ class ShopCarsApplicationTests {
     private lateinit var carService: CarServiceImpl
 
     @Autowired
+    private lateinit var customerService: CustomerServiceImpl
+
+    @Autowired
     private lateinit var modelService: ModelServiceImpl
 
     @Autowired
@@ -75,7 +79,7 @@ class ShopCarsApplicationTests {
                 .andReturn().response.contentAsString
     }
     fun doLoginFail(): String {
-        val customer = Customer(name = "Creditas1", surname = "Creditas1", identification = "123456A", birthday = LocalDate.of(2017, 1, 13), email = "creditas1@creditas.com", password = "creditas1")
+        val customer = Customer(name = "asdgsfd", surname = "asdasd", identification = "123456A", birthday = LocalDate.of(2017, 1, 13), email = "asdasd@creditas.com", password = "sadasd")
 
         return mockMvc.perform(MockMvcRequestBuilders.post("$customerEndPoint/login")
                 .body(data = customer, mapper = mapper))
@@ -326,4 +330,34 @@ class ShopCarsApplicationTests {
 
         MatcherAssert.assertThat(modelsString, Matchers.`is`(Matchers.equalTo(jsonString)))
     }
+
+    @Test
+    fun findAllUsers(){
+        val bearer = doLogin()
+
+        mockMvc.perform(MockMvcRequestBuilders.get(customerEndPoint)
+                .header("Authoritation", bearer))
+                .andExpect(status().isOk)
+    }
+
+    @Test
+    fun findCustomerById(){
+        val bearer = doLogin()
+        val customerFromService = customerService.getCustomers().first()
+
+        mockMvc.perform(MockMvcRequestBuilders.get("$customerEndPoint/${customerFromService.id}")
+                .header("Authoritation", bearer))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.id", Matchers.`is`(customerFromService.id.toInt())))
+    }
+    @Test
+    fun findCustomerByIdFail(){
+        val bearer = doLogin()
+        val idRandom = (500..50000).random()
+
+        mockMvc.perform(MockMvcRequestBuilders.get("$customerEndPoint/${idRandom}")
+                .header("Authoritation", bearer))
+                .andExpect(status().isNoContent)
+    }
+
 }

@@ -57,10 +57,6 @@ class ShopCarsApplication {
     }
 }
 
-//fun main(args: Array<String>) {
-//    runApplication<ShopCarsApplication>(*args)
-//}
-
 @Component
 class OnBoot(
         private val carService: CarServiceImpl,
