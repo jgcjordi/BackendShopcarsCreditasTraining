@@ -18,6 +18,9 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity
+import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.web.WebAppConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder
@@ -30,6 +33,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import java.time.LocalDate
 
+
+@ContextConfiguration
+@WebAppConfiguration
 @SpringBootTest
 class ShopCarsApplicationTests {
 
@@ -57,6 +63,7 @@ class ShopCarsApplicationTests {
     private val mockMvc: MockMvc by lazy {//inicializacion perezosa, sera inicializada cuando se necesitada, bajo demanda "by".
         //configura el mockMvc para que cada vez que haga una peticion http la imprima en la consola.
         MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply<DefaultMockMvcBuilder>(springSecurity())
                 .alwaysDo<DefaultMockMvcBuilder>(MockMvcResultHandlers.print()).build()
     }
 
