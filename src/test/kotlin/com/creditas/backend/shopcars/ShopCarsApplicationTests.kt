@@ -78,8 +78,8 @@ class ShopCarsApplicationTests {
                 .andExpect(status().isOk)
                 .andReturn().response.contentAsString
     }
-    fun doLoginFail(): String {
-        val customer = Customer(name = "asdgsfd", surname = "asdasd", identification = "123456A", birthday = LocalDate.of(2017, 1, 13), email = "asdasd@creditas.com", password = "sadasd")
+    fun doLoginCustomerEmptyPurchaseAndSellers(): String {
+        val customer = Customer (name = "Creditas1", surname = "Creditas1", identification = "123456A", birthday = LocalDate.of(2017, 1, 13), email = "creditas1@creditas.com", password = "creditas1")
 
         return mockMvc.perform(MockMvcRequestBuilders.post("$customerEndPoint/login")
                 .body(data = customer, mapper = mapper))
@@ -235,7 +235,7 @@ class ShopCarsApplicationTests {
 
     @Test
     fun findPurchaseCarsFail() {
-        val bearer = doLoginFail()
+        val bearer = doLoginCustomerEmptyPurchaseAndSellers()
         mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/findPurcharseCars")
                 .header("Authorization", bearer))
                 .andExpect(status().isNoContent)
@@ -251,7 +251,7 @@ class ShopCarsApplicationTests {
     }
     @Test
     fun findSellerCarsFail() {
-        val bearer = doLoginFail()
+        val bearer = doLoginCustomerEmptyPurchaseAndSellers()
         mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/findSellerCars")
                 .header("Authorization", bearer))
                 .andExpect(status().isNoContent)
@@ -266,7 +266,7 @@ class ShopCarsApplicationTests {
     }
     @Test
     fun findLastPurchaseCarFail() {
-        val bearer = doLoginFail()
+        val bearer = doLoginCustomerEmptyPurchaseAndSellers()
         mockMvc.perform(MockMvcRequestBuilders.get("$carsEndPoint/findLastPurcharseCar")
                 .header("Authorization", bearer))
                 .andExpect(status().isNoContent)
