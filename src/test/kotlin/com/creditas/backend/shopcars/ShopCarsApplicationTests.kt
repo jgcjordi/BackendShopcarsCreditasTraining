@@ -343,7 +343,7 @@ class ShopCarsApplicationTests {
         val bearer = doLogin()
 
         mockMvc.perform(MockMvcRequestBuilders.get(customerEndPoint)
-                .header("Authoritation", bearer))
+                .header("Authorization", bearer))
                 .andExpect(status().isOk)
     }
 
@@ -353,7 +353,7 @@ class ShopCarsApplicationTests {
         val customerFromService = customerService.getCustomers().first()
 
         mockMvc.perform(MockMvcRequestBuilders.get("$customerEndPoint/${customerFromService.id}")
-                .header("Authoritation", bearer))
+                .header("Authorization", bearer))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.id", Matchers.`is`(customerFromService.id.toInt())))
     }
@@ -362,8 +362,8 @@ class ShopCarsApplicationTests {
         val bearer = doLogin()
         val idRandom = (500..50000).random()
 
-        mockMvc.perform(MockMvcRequestBuilders.get("$customerEndPoint/${idRandom}")
-                .header("Authoritation", bearer))
+        mockMvc.perform(MockMvcRequestBuilders.get("$customerEndPoint/$idRandom")
+                .header("Authorization", bearer))
                 .andExpect(status().isNoContent)
     }
 
